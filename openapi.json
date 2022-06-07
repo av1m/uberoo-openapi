@@ -1,0 +1,384 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Uberoo API",
+    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API\nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n",
+    "version": "1.0.0",
+    "termsOfService": "http://api.uberoo.eat/terms/",
+    "contact": {
+      "name": "Uberoo API Team",
+      "email": "apiteam@uberoo.eat",
+      "url": "https://api.uberoo.eat/contact/"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Local server"
+    },
+    {
+      "url": "http://api-sandbox.uberoo.eat",
+      "description": "Sandbox server"
+    },
+    {
+      "url": "http://api-staging.uberoo.eat",
+      "description": "Staging server"
+    },
+    {
+      "url": "https://api.uberoo.eat",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "restaurants",
+      "description": "Manage restaurants"
+    }
+  ],
+  "paths": {
+    "/restaurants": {
+      "get": {
+        "summary": "List all restaurants",
+        "operationId": "getRestaurants",
+        "description": "Retrieve all the information about all the restaurants",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of restaurants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new restaurant",
+        "operationId": "createRestaurant",
+        "description": "Create a new restaurant",
+        "tags": [
+          "restaurants"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/NullResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/{restaurantId}": {
+      "get": {
+        "summary": "Get a restaurant",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "operationId": "getRestaurant",
+        "description": "Retrieve all the information about a given restaurant by its id",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the restaurant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Not Found",
+                  "code": 404,
+                  "details": "The restaurant you are looking for could not be found"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "restaurantId": {
+        "name": "restaurantId",
+        "in": "path",
+        "required": true,
+        "example": "62f1l77bcf86cd799439011",
+        "description": "The id of the restaurant to retrieve",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "userId": {
+        "name": "userId",
+        "in": "path",
+        "required": true,
+        "example": "68f1l77bcf86cd799439011",
+        "description": "The id of the user to retrieve",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "description": "Offset the number of data returned",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "Limit the number of data returned",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "order": {
+        "name": "order",
+        "in": "query",
+        "description": "Returned data order",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      },
+      "sort": {
+        "name": "sort",
+        "in": "query",
+        "description": "Returned data sort",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "default": "id",
+          "enum": [
+            "id",
+            "first_name",
+            "last_name"
+          ]
+        }
+      }
+    },
+    "schemas": {
+      "Restaurant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the restaurant",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799919011"
+          },
+          "name": {
+            "description": "The name of the restaurant",
+            "type": "string",
+            "nullable": false,
+            "example": "Le Cinq"
+          },
+          "tag": {
+            "description": "A list of tag of the restaurant",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "gastronomy",
+              "french"
+            ]
+          },
+          "openingHours": {
+            "description": "The opening hours of the restaurant",
+            "type": "array",
+            "items": {
+              "description": "Format day:hour with 0 for monday and 0,23 for hours",
+              "type": "string"
+            },
+            "minItems": 0,
+            "maxItems": 168,
+            "example": [
+              "1:11",
+              "1:12",
+              "1:13",
+              "1:14"
+            ]
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "openingHours",
+          "address"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the address",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "number": {
+            "description": "The address number",
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "example": 5
+          },
+          "street": {
+            "description": "The address street",
+            "type": "string",
+            "nullable": false,
+            "example": "Rue Charlot"
+          },
+          "city": {
+            "description": "The address city",
+            "type": "string",
+            "nullable": false,
+            "example": "Paris"
+          },
+          "postalCode": {
+            "description": "The address postal code",
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 75003
+          },
+          "state": {
+            "description": "The address state",
+            "type": "string",
+            "nullable": true,
+            "example": "Île-de-France"
+          },
+          "country": {
+            "description": "The address country",
+            "type": "string",
+            "nullable": false,
+            "example": "France"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "street",
+          "city",
+          "postalCode",
+          "country"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "nullable": false,
+            "example": "Internal Server Error"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true,
+            "example": "Something went wrong, please try again later"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    "responses": {
+      "UnexpectedError": {
+        "description": "Unexpected error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Internal Server Error",
+              "code": 500,
+              "details": "Something went wrong, please try again later"
+            }
+          }
+        }
+      },
+      "NullResponse": {
+        "description": "Null response"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
