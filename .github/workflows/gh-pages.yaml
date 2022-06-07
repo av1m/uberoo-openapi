@@ -2,7 +2,7 @@ name: Deploy UberooAPI to GitHub Pages
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   gh-release:
