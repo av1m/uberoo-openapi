@@ -1,0 +1,9 @@
+description: Unexpected error
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Internal Server Error"
+      code: 500
+      details: "Something went wrong, please try again later"

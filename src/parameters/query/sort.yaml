@@ -1,0 +1,11 @@
+name: "sort"
+in: "query"
+description: "Returned data sort"
+required: false
+schema:
+  type: "string"
+  default: "id"
+  enum:
+    - "id"
+    - "first_name"
+    - "last_name"

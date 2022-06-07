@@ -1,0 +1,46 @@
+type: object
+properties:
+  id:
+    description: The id of the address
+    type: string
+    nullable: false
+    example: "507f1f77bcf86cd799439011"
+  number:
+    description: The address number
+    type: integer
+    format: int32
+    nullable: true
+    example: 5
+  street:
+    description: The address street
+    type: string
+    nullable: false
+    example: "Rue Charlot"
+  city:
+    description: The address city
+    type: string
+    nullable: false
+    example: "Paris"
+  postalCode:
+    description: The address postal code
+    type: integer
+    format: int32
+    nullable: false
+    example: 75003
+  state:
+    description: The address state
+    type: string
+    nullable: true
+    example: "Île-de-France"
+  country:
+    description: The address country
+    type: string
+    nullable: false
+    example: "France"
+required:
+  - id
+  - number
+  - street
+  - city
+  - postalCode
+  - country

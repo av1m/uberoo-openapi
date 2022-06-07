@@ -1,0 +1,36 @@
+openapi: "3.0.0"
+info:
+  title: Uberoo API
+  description: |
+    To manage restaurants, menus, delivery people and orders with the Uberoo REST API
+    You can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).
+  version: "1.0.0"
+  termsOfService: http://api.uberoo.eat/terms/
+  contact:
+    name: Uberoo API Team
+    email: apiteam@uberoo.eat
+    url: https://api.uberoo.eat/contact/
+servers:
+  - url: "https://api.uberoo.eat"
+    description: "Production server"
+  - url: "http://api-staging.uberoo.eat"
+    description: "Staging server"
+  - url: "http://api-sandbox.uberoo.eat"
+    description: "Sandbox server"
+  - url: "http://localhost:8080"
+    description: "Local server"
+tags:
+  - name: restaurants
+    description: "Manage restaurants"
+paths:
+  /restaurants:
+    $ref: "./resources/restaurants.yaml"
+  /restaurants/{restaurantId}:
+    $ref: "./resources/restaurant.yaml"
+components:
+  parameters:
+    $ref: "./parameters/_index.yaml"
+  schemas:
+    $ref: "./schemas/_index.yaml"
+  responses:
+    $ref: "./responses/_index.yaml"

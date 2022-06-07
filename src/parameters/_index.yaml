@@ -1,0 +1,15 @@
+# Path
+restaurantId:
+  $ref: "./path/restaurantId.yaml"
+userId:
+  $ref: "./path/userId.yaml"
+
+# Query
+offset:
+  $ref: "./query/offset.yaml"
+limit:
+  $ref: "./query/limit.yaml"
+order:
+  $ref: "./query/order.yaml"
+sort:
+  $ref: "./query/sort.yaml"

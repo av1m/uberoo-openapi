@@ -1,0 +1,18 @@
+type: object
+properties:
+  code:
+    type: integer
+    format: int32
+    nullable: false
+    example: 500
+  message:
+    type: string
+    nullable: false
+    example: "Internal Server Error"
+  details:
+    type: string
+    nullable: true
+    example: "Something went wrong, please try again later"
+required:
+  - code
+  - message

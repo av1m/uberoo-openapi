@@ -1,0 +1,6 @@
+Restaurant:
+  $ref: "./Restaurant.yaml"
+Address:
+  $ref: "./Address.yaml"
+Error:
+  $ref: "./Error.yaml"

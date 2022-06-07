@@ -1,0 +1,20 @@
+{
+  "name": "uberooapi",
+  "version": "0.1.0",
+  "description": "This repository contains OpenAPI specifications for the Uberoo API",
+  "config": {
+    "extension": "yaml"
+  },
+  "scripts": {
+    "build": "swagger-cli bundle src/openapi.yaml --outfile .build/openapi.$npm_package_config_extension --type $npm_package_config_extension",
+    "test": "npm run build && swagger-cli validate .build/openapi.$npm_package_config_extension && spectral lint .build/openapi.$npm_package_config_extension",
+    "clean": "rm -r .build",
+    "redoc-preview": "npm run build && redoc-cli serve .build/openapi.$npm_package_config_extension --options.onlyRequiredInSamples",
+    "redoc-html": "npm run build && redoc-cli bundle .build/openapi.$npm_package_config_extension --output .build/index.html --options.onlyRequiredInSamples"
+  },
+  "dependencies": {
+    "@apidevtools/swagger-cli": "^4.0.4",
+    "@stoplight/spectral": "^6.1.0",
+    "redoc-cli": "^0.13.16"
+  }
+}

@@ -1,0 +1,10 @@
+name: "order"
+in: "query"
+description: "Returned data order"
+required: false
+schema:
+  type: "string"
+  default: "asc"
+  enum:
+    - "asc"
+    - "desc"
