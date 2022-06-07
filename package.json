@@ -6,15 +6,19 @@
     "extension": "yaml"
   },
   "scripts": {
+    "preinstall": "pip install connexion",
     "build": "swagger-cli bundle src/openapi.yaml --outfile .build/openapi.$npm_package_config_extension --type $npm_package_config_extension",
+    "start": "concurrently 'node index.js' 'npm run swagger-preview'",
     "test": "npm run build && swagger-cli validate .build/openapi.$npm_package_config_extension && spectral lint .build/openapi.$npm_package_config_extension",
     "clean": "rm -r .build",
+    "swagger-preview": "connexion run .build/openapi.$npm_package_config_extension --stub --debug --verbose --mock all",
     "redoc-preview": "npm run build && redoc-cli serve .build/openapi.$npm_package_config_extension --options.onlyRequiredInSamples",
     "redoc-html": "npm run build && redoc-cli bundle .build/openapi.$npm_package_config_extension --output .build/index.html --options.onlyRequiredInSamples"
   },
   "dependencies": {
     "@apidevtools/swagger-cli": "^4.0.4",
     "@stoplight/spectral": "^6.1.0",
-    "redoc-cli": "^0.13.16"
+    "redoc-cli": "^0.13.16",
+    "watchdog": "^0.8.17"
   }
 }
