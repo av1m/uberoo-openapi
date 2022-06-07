@@ -1,5 +1,7 @@
 get:
   summary: Get a restaurant
+  security:
+    - bearerAuth: []
   operationId: getRestaurant
   description: Retrieve all the information about a given restaurant by its id
   tags:
