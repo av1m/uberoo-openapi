@@ -1,0 +1,11 @@
+description: "Validation failed"
+headers:
+  $ref: "../parameters/headers/limit.yaml"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Validation failed"
+      code: 422
+      details: "The request was successfully constituted but could not be processed due to semantic errors."

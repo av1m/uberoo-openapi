@@ -1,0 +1,11 @@
+description: "Forbidden"
+headers:
+  $ref: "../parameters/headers/limit.yaml"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Forbidden"
+      code: 403
+      details: "You are not allowed to access this resource, please contact the administrator."

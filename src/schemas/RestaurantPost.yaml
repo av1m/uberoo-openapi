@@ -1,0 +1,32 @@
+type: object
+properties:
+  id:
+    description: The id of the restaurant
+    type: string
+    nullable: false
+    example: "507f1f77bcf86cd799919011"
+  name:
+    description: The name of the restaurant
+    type: string
+    nullable: false
+    example: "Le Cinq"
+  tag:
+    description: A list of tag of the restaurant
+    type: array
+    items:
+      type: string
+    example: ["gastronomy", "french"]
+  openingHours:
+    description: The opening hours of the restaurant
+    type: array
+    items:
+      description: "Format day:hour with 0 for monday and 0,23 for hours"
+      type: string
+    minItems: 0
+    maxItems: 168
+    example: ["1:11", "1:12", "1:13", "1:14"]
+required:
+  - id
+  - name
+  - openingHours
+  - address

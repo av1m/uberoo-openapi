@@ -1,0 +1,11 @@
+description: "Requires authentication"
+headers:
+  $ref: "../parameters/headers/limit.yaml"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Authentication required"
+      code: 401
+      details: "You must be authenticated to access this resource"

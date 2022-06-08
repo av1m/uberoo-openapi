@@ -1,29 +1,54 @@
 get:
-  summary: Get a restaurant
-  security:
-    - bearerAuth: []
+  summary: "Get a restaurant"
   operationId: getRestaurant
-  description: Retrieve all the information about a given restaurant by its id
+  description: "Retrieve all the information about a given restaurant by its id"
   tags:
     - restaurants
   parameters:
     - $ref: "../parameters/path/restaurantId.yaml"
   responses:
-    200:
-      description: Expected response to a valid request
+    "200":
+      description: "Expected response to a valid request"
+      headers:
+        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:
             $ref: "../schemas/Restaurant.yaml"
-    404:
-      description: Unable to find the restaurant
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-          example:
-            message: "Not Found"
-            code: 404
-            details: "The restaurant you are looking for could not be found"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+delete:
+  summary: "Delete a restaurant"
+  operationId: deleteRestaurant
+  description: "Deletes the restaurant with the specified ID"
+  tags:
+    - restaurants
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+  security:
+    - bearerAuth: []
+  responses:
+    "204":
+      description: "Restaurant was deleted"
+      headers:
+        $ref: "../parameters/headers/limit.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
     default:
       $ref: "../responses/UnexpectedError.yaml"

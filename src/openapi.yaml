@@ -22,6 +22,12 @@ servers:
 tags:
   - name: restaurants
     description: "Manage restaurants"
+  - name: foods
+    description: "Manage foods and menus of restaurants"
+  - name: carts
+    description: "Manage carts / baskets of customers"
+  - name: orders
+    description: "Manage orders of customers"
 paths:
   /restaurants:
     $ref: "./resources/restaurants.yaml"

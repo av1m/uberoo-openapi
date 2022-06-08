@@ -1,4 +1,14 @@
+NotAuthorized:
+  $ref: "./NotAuthorized.yaml"
+Forbidden:
+  $ref: "./Forbidden.yaml"
+NotFound:
+  $ref: "./NotFound.yaml"
+NotModified:
+  $ref: "./NotModified.yaml"
+TooManyRequest:
+  $ref: "./TooManyRequest.yaml"
+ValidationFailed:
+  $ref: "./ValidationFailed.yaml"
 UnexpectedError:
   $ref: "./UnexpectedError.yaml"
-NullResponse:
-  $ref: "./NullResponse.yaml"

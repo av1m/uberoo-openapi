@@ -1,0 +1,11 @@
+description: Not modified
+headers:
+  $ref: "../parameters/headers/limit.yaml"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Not Modified"
+      code: 304
+      details: "The requested resource has not been modified since the last request and we use the cached version of the resource"

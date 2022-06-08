@@ -1,6 +1,6 @@
 name: "limit"
 in: "query"
-description: "Limit the number of data returned"
+description: "The numbers of items to return"
 required: true
 schema:
   type: "integer"

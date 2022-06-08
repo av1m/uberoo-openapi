@@ -1,6 +1,6 @@
 name: "order"
 in: "query"
-description: "Returned data order"
+description: "The order of returned data (asc or desc)"
 required: false
 schema:
   type: "string"

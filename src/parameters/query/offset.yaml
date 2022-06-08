@@ -1,10 +1,7 @@
 name: "offset"
 in: "query"
-description: "Offset the number of data returned"
+description: "The offset of returned data"
 required: false
 schema:
-  type: "integer"
-  format: "int32"
-  default: 10
-  minimum: 1
-  maximum: 100
+  type: "string"
+  example: "YXJyYXljb25uZWN0aW9uOjE"

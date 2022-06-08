@@ -1,0 +1,13 @@
+name: "filter"
+in: "query"
+required: false
+description: |
+  The filter to apply to the data (e.g. 'name:John'). We can use :
+  - 'or' operator to combine filters (e.g. 'name:John or name:Doe').
+  - 'and' operator to combine filters (e.g. 'name:Doe and firstname:John').
+  - '\*' wildcard operator to match any string (e.g. 'name:John\*' will match 'John' and 'John Doe')
+schema:
+  type: "string"
+  example: "name:John"
+  minLength: 3
+  maxLength: 255

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "This repository contains OpenAPI specifications for the Uberoo API",
   "config": {
-    "extension": "json"
+    "extension": "yaml"
   },
   "main": "index.js",
   "scripts": {

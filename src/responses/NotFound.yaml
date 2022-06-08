@@ -1,0 +1,11 @@
+description: "Ressource not found"
+headers:
+  $ref: "../parameters/headers/limit.yaml"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Ressource not found"
+      code: 404
+      details: "The ressource you are looking for could not be found"

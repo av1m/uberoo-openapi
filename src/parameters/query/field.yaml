@@ -1,0 +1,9 @@
+name: "fields"
+in: "query"
+description: "The fields to return"
+required: false
+schema:
+  type: "array"
+  example: ["id"]
+  items:
+    type: "string"
