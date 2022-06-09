@@ -48,7 +48,11 @@ properties:
       - "consumer"
       - "support"
   address:
-    $ref: "./Address.yaml"
+    anyOf:
+      - $ref: "./Address.yaml"
+      - type: string
+        description: The id of the address
+        example: "5421f77bcf86cd799439099"
 required:
   - id
   - firstName

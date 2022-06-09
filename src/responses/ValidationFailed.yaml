@@ -6,4 +6,6 @@ content:
     example:
       message: "Validation failed"
       code: 422
-      details: "The request was successfully constituted but could not be processed due to semantic errors."
+      details: |
+        The request was successfully constituted but could not be processed due to semantic errors.
+        If you try to add an address, the address may not be valid.

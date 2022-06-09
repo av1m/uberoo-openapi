@@ -1,0 +1,35 @@
+type: object
+properties:
+  name:
+    description: The name of the food, can be a menu
+    type: string
+    nullable: false
+    example: "Pizza Margherita"
+  price:
+    description: The price of the food
+    type: number
+    format: float
+    nullable: false
+    example: 10.5
+  isGlutenFree:
+    description: Indicates if the food is gluten free
+    type: boolean
+    default: false
+  isVegetarian:
+    description: Indicates if the food is vegetarian
+    type: boolean
+    default: false
+  isVegan:
+    description: Indicates if the food is vegan
+    type: boolean
+    default: false
+  restaurant:
+    anyOf:
+      - type: string
+        description: The id of the restaurant
+        example: "93321f77bcf86cd799439055"
+      - $ref: "./Restaurant.yaml"
+required:
+  - name
+  - price
+  - restaurant

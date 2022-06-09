@@ -96,6 +96,8 @@ post:
       $ref: "../responses/NotAuthorized.yaml"
     "403":
       $ref: "../responses/Forbidden.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
     "429":
       $ref: "../responses/TooManyRequest.yaml"
     default:

@@ -1,25 +1,11 @@
-type: object
-properties:
-  id:
-    description: The id of the food
-    type: string
-    nullable: false
-    example: "507f1f77bcf86cd799439011"
-  name:
-    description: The name of the food, can be a menu
-    type: string
-    nullable: false
-    example: "Pizza Margherita"
-  price:
-    description: The price of the food
-    type: number
-    format: float
-    nullable: false
-    example: 10.5
-  restaurant:
-    $ref: "./Restaurant.yaml"
-required:
-  - id
-  - name
-  - price
-  - restaurant
+allOf:
+  - type: object
+    properties:
+      id:
+        description: The id of the food
+        type: string
+        nullable: false
+        example: "507f1f77bcf86cd799439011"
+    required:
+      - id
+  - $ref: "./FoodWOId.yaml"

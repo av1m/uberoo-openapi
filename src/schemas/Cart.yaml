@@ -2,12 +2,20 @@ type: object
 description: The cart of the user who can be only a 'consumer'
 properties:
   user:
-    $ref: "./User.yaml"
+    anyOf:
+      - type: string
+        description: The id of the user
+        example: "507f1f77bcf86cd799439011"
+      - $ref: "./User.yaml"
   items:
     description: The list of items to order
     type: array
     items:
-      $ref: "./Food.yaml"
+      anyOf:
+        - $ref: "./Food.yaml"
+        - type: string
+          description: The id of the food
+          example: "321f1f77bcf86cd79943991"
     minItems: 0
     maxItems: 10
   total:

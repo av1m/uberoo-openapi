@@ -1,0 +1,111 @@
+get:
+  summary: "Get all foods in a restaurant"
+  operationId: getRestaurantFoods
+  description: "Recovers the list of all foods and menu associated with a specific restaurant"
+  tags:
+    - foods
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+    - name: "is_gluten_free"
+      in: "query"
+      description: "Filter foods by their gluten-free status"
+      required: false
+      schema:
+        type: "boolean"
+        default: false
+    - name: "is_vegetarian"
+      in: "query"
+      description: "Filter foods by their vegetarian status"
+      required: false
+      schema:
+        type: "boolean"
+        default: false
+    - name: "is_vegan"
+      in: "query"
+      description: "Filter foods by their vegan status"
+      required: false
+      schema:
+        type: "boolean"
+        default: false
+    - name: "is_lactose_free"
+      in: "query"
+      description: "Filter foods by their lactose-free status"
+      required: false
+      schema:
+        type: "boolean"
+        default: false
+    - $ref: "../parameters/query/order.yaml"
+    - $ref: "../parameters/query/sort.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/filter.yaml"
+  responses:
+    "200":
+      description: A list of foods associated with the restaurant
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../schemas/Food.yaml"
+              pagination:
+                type: object
+                properties:
+                  endCursor:
+                    type: string
+                    example: ""
+                  hasNextPage:
+                    type: boolean
+                    example: false
+    "204":
+      description: "The query was successful but no foods were found"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+post:
+  summary: "Create a new food"
+  operationId: createFood
+  description: "Creates a new food associated with a restaurant"
+  tags:
+    - foods
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: "Food object"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/FoodWOId.yaml"
+  responses:
+    "201":
+      description: "The food was successfully created"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Food.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

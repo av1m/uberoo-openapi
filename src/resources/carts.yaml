@@ -91,6 +91,8 @@ put:
       $ref: "../responses/Forbidden.yaml"
     "404":
       $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
     "429":
       $ref: "../responses/TooManyRequest.yaml"
     default:

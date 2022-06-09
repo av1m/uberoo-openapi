@@ -26,7 +26,11 @@ properties:
     maxItems: 168
     example: ["1:11", "1:12", "1:13", "1:14"]
   address:
-    $ref: "./Address.yaml"
+    anyOf:
+      - $ref: "./Address.yaml"
+      - type: string
+        description: The id of the address
+        example: "5421f77bcf86cd799439099"
 required:
   - id
   - name
