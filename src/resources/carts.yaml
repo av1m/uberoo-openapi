@@ -65,7 +65,11 @@ post:
 put:
   summary: "Update or create the cart of the user passed in the path"
   operationId: updateUserCart
-  description: "Update or create the cart of the user passed in the path and return the updated cart"
+  description: |
+    Update or create the cart of the user passed in the path and return the updated cart.
+    If an item does not exist, it will be created.
+    If an item exists, it will be updated.
+    If an item is not present (anymore) in the list, it will be deleted.
   tags:
     - carts
   parameters:

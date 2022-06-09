@@ -1,0 +1,97 @@
+get:
+  summary: "Get a food item"
+  operationId: getFood
+  description: "Retrieve all the information about a given food"
+  tags:
+    - foods
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+    - $ref: "../parameters/path/foodId.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/order.yaml"
+    - $ref: "../parameters/query/sort.yaml"
+  responses:
+    "200":
+      description: "All information about the food"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Food.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+delete:
+  summary: "Delete a food item"
+  operationId: deleteFood
+  description: "Delete a food item with the specified ID from the restaurant"
+  tags:
+    - foods
+  security:
+    - bearerAuth: []
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+    - $ref: "../parameters/path/foodId.yaml"
+  responses:
+    "204":
+      description: "Food item was deleted"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+patch:
+  summary: "Update a food item"
+  operationId: updateFood
+  description: "Update a food item for the restaurant"
+  tags:
+    - foods
+  security:
+    - bearerAuth: []
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+    - $ref: "../parameters/path/foodId.yaml"
+  requestBody:
+    description: "Information about the food item"
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../schemas/Food.yaml"
+  responses:
+    "200":
+      description: "Food item was updated"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Food.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

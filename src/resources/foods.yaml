@@ -109,3 +109,49 @@ post:
       $ref: "../responses/TooManyRequest.yaml"
     default:
       $ref: "../responses/UnexpectedError.yaml"
+put:
+  summary: "Update many foods"
+  operationId: updateRestaurantFoods
+  description: |
+    Updates the list of foods associated with a restaurant.
+    If a food is not present in the list, it will be deleted.
+  tags:
+    - foods
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+  security:
+    - bearerAuth: []
+  requestBody:
+    description: "List of foods objects"
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            $ref: "../schemas/Food.yaml"
+  responses:
+    "200":
+      description: "The foods were successfully updated"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../schemas/Food.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

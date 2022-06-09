@@ -90,6 +90,10 @@ post:
   responses:
     "201":
       description: "Restaurant was created"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Restaurant.yaml"
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":

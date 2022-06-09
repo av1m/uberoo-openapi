@@ -6,6 +6,10 @@ get:
     - restaurants
   parameters:
     - $ref: "../parameters/path/restaurantId.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/order.yaml"
+    - $ref: "../parameters/query/sort.yaml"
   responses:
     "200":
       description: "Expected response to a valid request"
