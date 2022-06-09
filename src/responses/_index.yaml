@@ -1,3 +1,5 @@
+BadRequest:
+  $ref: "./BadRequest.yaml"
 NotAuthorized:
   $ref: "./NotAuthorized.yaml"
 Forbidden:

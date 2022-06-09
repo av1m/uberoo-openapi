@@ -86,48 +86,12 @@ post:
   security:
     - bearerAuth: []
   requestBody:
-    description: "Restaurant object"
-    required: true
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            name:
-              type: string
-              example: "Restaurant 1"
-            address:
-              type: string
-              example: "1 rue de la paix, 75010 Paris"
-            tag:
-              description: A list of tag of the restaurant
-              type: array
-              items:
-                type: string
-              example: ["gastronomy", "french"]
-            openingHours:
-              description: The opening hours of the restaurant
-              type: array
-              items:
-                description: "Format day:hour with 0 for monday and 0,23 for hours"
-                type: string
-              minItems: 0
-              maxItems: 168
-              example: ["1:11", "1:12", "1:13", "1:14"]
+    $ref: "../requestBody/restaurant.yaml"
   responses:
     "201":
       description: "Restaurant was created"
-
     "400":
-      description: "Bad request"
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-          example:
-            message: "Bad Request"
-            code: 400
-            details: "The request was malformed, please check the request body reference and example. The request body should be a valid JSON"
+      $ref: "../responses/BadRequest.yaml"
     "401":
       $ref: "../responses/NotAuthorized.yaml"
     "403":

@@ -48,3 +48,38 @@ delete:
       $ref: "../responses/TooManyRequest.yaml"
     default:
       $ref: "../responses/UnexpectedError.yaml"
+patch:
+  summary: "Update a restaurant"
+  operationId: updateRestaurant
+  description: "Update the restaurant with the specified ID"
+  tags:
+    - restaurants
+  parameters:
+    - $ref: "../parameters/path/restaurantId.yaml"
+  security:
+    - bearerAuth: []
+  requestBody:
+    $ref: "../requestBody/restaurant.yaml"
+  responses:
+    "200":
+      description: "Restaurant was updated"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Restaurant.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

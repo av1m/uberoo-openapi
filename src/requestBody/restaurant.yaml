@@ -1,0 +1,28 @@
+description: "Restaurant object"
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "McDonald's"
+        address:
+          type: string
+          example: "1 rue de la paix, 75010 Paris"
+        tag:
+          description: A list of tag of the restaurant
+          type: array
+          items:
+            type: string
+          example: ["fast-food", "american"]
+        openingHours:
+          description: The opening hours of the restaurant
+          type: array
+          items:
+            description: "Format day:hour with 0 for monday and 0,23 for hours"
+            type: string
+          minItems: 0
+          maxItems: 168
+          example: ["0:20", "0:21", "0:22", "0:23"]

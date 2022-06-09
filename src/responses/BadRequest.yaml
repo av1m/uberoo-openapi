@@ -1,0 +1,9 @@
+description: "Bad request"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Bad Request"
+      code: 400
+      details: "The request was malformed, please check the request body reference and example. The request body should be a valid JSON"
