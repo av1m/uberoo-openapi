@@ -1,0 +1,33 @@
+type: object
+description: The cart of the user who can be only a 'consumer'
+properties:
+  user:
+    $ref: "./User.yaml"
+  items:
+    description: The list of items to order
+    type: array
+    items:
+      $ref: "./Food.yaml"
+    minItems: 0
+    maxItems: 10
+  total:
+    description: The total price of the basket
+    type: number
+    format: float
+    example: 10.5
+  createdAt:
+    description: The date of creation of the basket
+    type: string
+    format: date-time
+    example: "2020-01-01T00:00:00Z"
+  updatedAt:
+    description: The date of update of the basket
+    type: string
+    format: date-time
+    example: "2020-01-01T00:00:00Z"
+required:
+  - user
+  - items
+  - total
+  - createdAt
+  - updatedAt

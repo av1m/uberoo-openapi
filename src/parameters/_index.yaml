@@ -3,6 +3,8 @@ restaurantId:
   $ref: "./path/restaurantId.yaml"
 userId:
   $ref: "./path/userId.yaml"
+foodId:
+  $ref: "./path/foodId.yaml"
 
 # Query
 offset:

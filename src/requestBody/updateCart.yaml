@@ -1,0 +1,17 @@
+description: "Update Cart object"
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        items:
+          description: "Cart item object"
+          type: array
+          items:
+            $ref: "../requestBody/cartItem.yaml"
+          minItems: 0
+          maxItems: 10
+          example: [{ foodId: "60f1l27bcf126cd799439011" }]
+      required:
+        - items

@@ -26,3 +26,8 @@ content:
           minItems: 0
           maxItems: 168
           example: ["0:20", "0:21", "0:22", "0:23"]
+      required:
+        - name
+        - address
+        - tag
+        - openingHours

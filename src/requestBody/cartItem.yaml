@@ -1,0 +1,11 @@
+description: "Cart item object"
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        foodId:
+          $ref: "../parameters/path/foodId.yaml"
+      required:
+        - foodId
