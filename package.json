@@ -13,8 +13,8 @@
     "test": "npm run build && swagger-cli validate .build/openapi.$npm_package_config_extension && spectral lint .build/openapi.$npm_package_config_extension",
     "clean": "rm -r .build",
     "swagger-docker": "docker-compose up -d",
-    "swagger-python": "connexion run .build/openapi.$npm_package_config_extension --stub --debug --verbose --mock all",
-    "redoc-preview": "npm run build && redoc-cli serve .build/openapi.$npm_package_config_extension --options.onlyRequiredInSamples",
+    "swagger-python": "connexion run .build/openapi.$npm_package_config_extension --stub --debug --verbose --mock all --port 5000",
+    "redoc-preview": "npm run build && redoc-cli serve .build/openapi.$npm_package_config_extension --options.onlyRequiredInSamples --port 5000",
     "redoc-html": "npm run build && redoc-cli bundle .build/openapi.$npm_package_config_extension --output .build/index.html --options.onlyRequiredInSamples"
   },
   "dependencies": {
