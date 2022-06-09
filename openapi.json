@@ -246,7 +246,14 @@
         },
         "responses": {
           "201": {
-            "description": "Restaurant was created"
+            "description": "Restaurant was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -256,6 +263,9 @@
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -277,6 +287,18 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
           }
         ],
         "responses": {
@@ -539,7 +561,7 @@
       "put": {
         "summary": "Update or create the cart of the user passed in the path",
         "operationId": "updateUserCart",
-        "description": "Update or create the cart of the user passed in the path and return the updated cart",
+        "description": "Update or create the cart of the user passed in the path and return the updated cart.\nIf an item does not exist, it will be created.\nIf an item exists, it will be updated.\nIf an item is not present (anymore) in the list, it will be deleted.\n",
         "tags": [
           "carts"
         ],
@@ -607,6 +629,9 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
           },
@@ -644,6 +669,473 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/{restaurantId}/foods": {
+      "get": {
+        "summary": "Get all foods in a restaurant",
+        "operationId": "getRestaurantFoods",
+        "description": "Recovers the list of all foods and menu associated with a specific restaurant",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "name": "is_gluten_free",
+            "in": "query",
+            "description": "Filter foods by their gluten-free status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_vegetarian",
+            "in": "query",
+            "description": "Filter foods by their vegetarian status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_vegan",
+            "in": "query",
+            "description": "Filter foods by their vegan status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_lactose_free",
+            "in": "query",
+            "description": "Filter foods by their lactose-free status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of foods associated with the restaurant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Food"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no foods were found"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new food",
+        "operationId": "createFood",
+        "description": "Creates a new food associated with a restaurant",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Food object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the food, can be a menu",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "Pizza Margherita"
+                  },
+                  "price": {
+                    "description": "The price of the food",
+                    "type": "number",
+                    "format": "float",
+                    "nullable": false,
+                    "example": 10.5
+                  },
+                  "isGlutenFree": {
+                    "description": "Indicates if the food is gluten free",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "isVegetarian": {
+                    "description": "Indicates if the food is vegetarian",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "isVegan": {
+                    "description": "Indicates if the food is vegan",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "restaurant": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "description": "The id of the restaurant",
+                        "example": "93321f77bcf86cd799439055"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Restaurant"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "price",
+                  "restaurant"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The food was successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update many foods",
+        "operationId": "updateRestaurantFoods",
+        "description": "Updates the list of foods associated with a restaurant.\nIf a food is not present in the list, it will be deleted.\n",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "List of foods objects",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The foods were successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/{restaurantId}/foods/{foodId}": {
+      "get": {
+        "summary": "Get a food item",
+        "operationId": "getFood",
+        "description": "Retrieve all the information about a given food",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          },
+          {
+            "$ref": "#/components/parameters/sort"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All information about the food",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a food item",
+        "operationId": "deleteFood",
+        "description": "Delete a food item with the specified ID from the restaurant",
+        "tags": [
+          "foods"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Food item was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a food item",
+        "operationId": "updateFood",
+        "description": "Update a food item for the restaurant",
+        "tags": [
+          "foods"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the food item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Food"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Food item was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -806,7 +1298,16 @@
             ]
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The id of the address",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
           }
         },
         "required": [
@@ -903,13 +1404,31 @@
         "description": "The cart of the user who can be only a 'consumer'",
         "properties": {
           "user": {
-            "$ref": "#/components/schemas/User"
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "The id of the user",
+                "example": "507f1f77bcf86cd799439011"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ]
           },
           "items": {
             "description": "The list of items to order",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Food"
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Food"
+                },
+                {
+                  "type": "string",
+                  "description": "The id of the food",
+                  "example": "321f1f77bcf86cd79943991"
+                }
+              ]
             },
             "minItems": 0,
             "maxItems": 10
@@ -942,36 +1461,24 @@
         ]
       },
       "Food": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The id of the food",
-            "type": "string",
-            "nullable": false,
-            "example": "507f1f77bcf86cd799439011"
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The id of the food",
+                "type": "string",
+                "nullable": false,
+                "example": "507f1f77bcf86cd799439011"
+              }
+            },
+            "required": [
+              "id"
+            ]
           },
-          "name": {
-            "description": "The name of the food, can be a menu",
-            "type": "string",
-            "nullable": false,
-            "example": "Pizza Margherita"
-          },
-          "price": {
-            "description": "The price of the food",
-            "type": "number",
-            "format": "float",
-            "nullable": false,
-            "example": 10.5
-          },
-          "restaurant": {
-            "$ref": "#/components/schemas/Restaurant"
+          {
+            "$ref": "#/paths/~1restaurants~1%7BrestaurantId%7D~1foods/post/requestBody/content/application~1json/schema"
           }
-        },
-        "required": [
-          "id",
-          "name",
-          "price",
-          "restaurant"
         ]
       },
       "User": {
@@ -1034,7 +1541,16 @@
             ]
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The id of the address",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
           }
         },
         "required": [
@@ -1149,7 +1665,7 @@
             "example": {
               "message": "Validation failed",
               "code": 422,
-              "details": "The request was successfully constituted but could not be processed due to semantic errors."
+              "details": "The request was successfully constituted but could not be processed due to semantic errors.\nIf you try to add an address, the address may not be valid.\n"
             }
           }
         }
