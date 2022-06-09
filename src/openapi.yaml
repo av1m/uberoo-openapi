@@ -2,14 +2,23 @@ openapi: "3.0.0"
 info:
   title: Uberoo API
   description: |
-    To manage restaurants, menus, delivery people and orders with the Uberoo REST API
+    To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  
     You can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).
+
+    # Authentication
+    ## JWT
+    To authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  
+    To find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  
+    You can generate a JWT token using the `/account/login` endpoint.
   version: "1.0.0"
   termsOfService: http://api.uberoo.eat/terms/
   contact:
     name: Uberoo API Team
     email: apiteam@uberoo.eat
     url: https://api.uberoo.eat/contact/
+externalDocs:
+  description: Github repository
+  url: "https://github.com/av1m/uberoo-api"
 servers:
   - url: "http://localhost:8000"
     description: "Local server"
