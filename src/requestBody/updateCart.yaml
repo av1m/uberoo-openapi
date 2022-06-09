@@ -9,9 +9,9 @@ content:
           description: "Cart item object"
           type: array
           items:
-            $ref: "../requestBody/cartItem.yaml"
+            type: string
           minItems: 0
           maxItems: 10
-          example: [{ foodId: "60f1l27bcf126cd799439011" }]
+          example: ["60f1l27bcf126cd799439011"]
       required:
         - items
