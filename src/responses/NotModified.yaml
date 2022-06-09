@@ -1,6 +1,4 @@
 description: Not modified
-headers:
-  $ref: "../parameters/headers/limit.yaml"
 content:
   application/json:
     schema:

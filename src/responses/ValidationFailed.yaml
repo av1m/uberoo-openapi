@@ -1,6 +1,4 @@
 description: "Validation failed"
-headers:
-  $ref: "../parameters/headers/limit.yaml"
 content:
   application/json:
     schema:

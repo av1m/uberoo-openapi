@@ -1,6 +1,4 @@
 description: Too many requests
-headers:
-  $ref: "../parameters/headers/limit.yaml"
 content:
   application/json:
     schema:

@@ -9,8 +9,6 @@ get:
   responses:
     "200":
       description: "Expected response to a valid request"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:
@@ -36,8 +34,6 @@ delete:
   responses:
     "204":
       description: "Restaurant was deleted"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
     "304":
       $ref: "../responses/NotModified.yaml"
     "401":

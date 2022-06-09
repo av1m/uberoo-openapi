@@ -5,6 +5,13 @@ get:
   tags:
     - restaurants
   parameters:
+    - name: "is_open"
+      in: "query"
+      description: "Filter restaurants by their open status (based on the current time)"
+      required: true
+      schema:
+        type: "boolean"
+        default: true
     - $ref: "../parameters/query/limit.yaml"
     - $ref: "../parameters/query/offset.yaml"
     - $ref: "../parameters/query/order.yaml"
@@ -14,8 +21,6 @@ get:
   responses:
     "200":
       description: A list of restaurants
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:
@@ -35,21 +40,9 @@ get:
                     type: boolean
                     example: false
     "204":
-      description: "No restaurants found"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-          example:
-            message: "No Restaurants found"
-            code: 204
-            details: "The query was successful but no restaurants were found"
+      description: "The query was successful but no restaurants were found"
     "205":
       description: "Partial list of restaurants"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:
@@ -72,8 +65,6 @@ get:
       $ref: "../responses/NotModified.yaml"
     "400":
       description: "Bad request"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:
@@ -100,16 +91,35 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../schemas/RestaurantPost.yaml"
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Restaurant 1"
+            address:
+              type: string
+              example: "1 rue de la paix, 75010 Paris"
+            tag:
+              description: A list of tag of the restaurant
+              type: array
+              items:
+                type: string
+              example: ["gastronomy", "french"]
+            openingHours:
+              description: The opening hours of the restaurant
+              type: array
+              items:
+                description: "Format day:hour with 0 for monday and 0,23 for hours"
+                type: string
+              minItems: 0
+              maxItems: 168
+              example: ["1:11", "1:12", "1:13", "1:14"]
   responses:
     "201":
       description: "Restaurant was created"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
+
     "400":
       description: "Bad request"
-      headers:
-        $ref: "../parameters/headers/limit.yaml"
       content:
         application/json:
           schema:

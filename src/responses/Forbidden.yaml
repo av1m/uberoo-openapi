@@ -1,6 +1,4 @@
 description: "Forbidden"
-headers:
-  $ref: "../parameters/headers/limit.yaml"
 content:
   application/json:
     schema:
