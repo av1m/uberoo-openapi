@@ -71,14 +71,17 @@ properties:
     format: date-time
     nullable: true
     example: "2020-01-01T00:00:00.000Z"
-  deliveryAddress:
-    description: The address of the delivery
-    $ref: "../schemas/Address.yaml"
   paymentId:
     description: The payment of the order (by default, the order is not paid)
     type: string
     nullable: true
     example: "62a286acf7efe2aca2f8289e"
+  deliveryAddress:
+    anyOf:
+      - $ref: "./Address.yaml"
+      - type: string
+        description: The address of the delivery
+        example: "5421f77bcf86cd799439099"
 required:
   - id
   - customerId
