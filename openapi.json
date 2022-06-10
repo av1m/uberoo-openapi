@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Uberoo API",
-    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API\nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n",
+    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n\n# Authentication\n## JWT\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
     "version": "1.0.0",
     "termsOfService": "http://api.uberoo.eat/terms/",
     "contact": {
@@ -10,6 +10,10 @@
       "email": "apiteam@uberoo.eat",
       "url": "https://api.uberoo.eat/contact/"
     }
+  },
+  "externalDocs": {
+    "description": "Github repository",
+    "url": "https://github.com/av1m/uberoo-api"
   },
   "servers": [
     {
@@ -65,6 +69,17 @@
             "schema": {
               "type": "boolean",
               "default": true
+            }
+          },
+          {
+            "name": "nearest",
+            "in": "query",
+            "description": "Filter restaurants by their distance from a specified location.\\n The specified location is specified by longitude and latitude. The distance is specified in meters.",
+            "required": true,
+            "schema": {
+              "description": "The longitude and latitude of the location to use as the center of the search. The longitude is in the range [-180,180] and the latitude is in the range [-90,90]. The default is the current location of the client.",
+              "type": "string",
+              "default": "48.8701419,2.271431"
             }
           },
           {
@@ -204,7 +219,7 @@
                   },
                   "address": {
                     "type": "string",
-                    "example": "1 rue de la paix, 75010 Paris"
+                    "example": "5 rue Charlot, 75003 Paris"
                   },
                   "tag": {
                     "description": "A list of tag of the restaurant",
@@ -515,7 +530,7 @@
                 "type": "object",
                 "properties": {
                   "foodId": {
-                    "description": "The id of the food to add",
+                    "description": "The id of the food to add. Check Food schema for more information.",
                     "type": "string",
                     "example": "60f1l27bcf126cd799439011"
                   }
@@ -1154,7 +1169,7 @@
         "in": "path",
         "required": true,
         "example": "62f1l77bcf86cd799439011",
-        "description": "The id of the restaurant to retrieve",
+        "description": "The id of the restaurant to retrieve. Check Restaurant schema for more information.",
         "schema": {
           "type": "string"
         }
@@ -1164,7 +1179,7 @@
         "in": "path",
         "required": true,
         "example": "68f1l77bcf86cd799439011",
-        "description": "The id of the user to retrieve",
+        "description": "The id of the user to retrieve. Check User schema for more information.",
         "schema": {
           "type": "string"
         }
@@ -1174,7 +1189,7 @@
         "in": "path",
         "required": true,
         "example": "60f1l27bcf126cd799439011",
-        "description": "The id of the food to retrieve",
+        "description": "The id of the food to retrieve. Check Food schema for more information.",
         "schema": {
           "type": "string"
         }
@@ -1315,88 +1330,6 @@
           "name",
           "openingHours",
           "address"
-        ]
-      },
-      "Address": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "The id of the address",
-            "type": "string",
-            "nullable": false,
-            "example": "507f1f77bcf86cd799439011"
-          },
-          "number": {
-            "description": "The address number",
-            "type": "integer",
-            "format": "int32",
-            "nullable": true,
-            "example": 5
-          },
-          "street": {
-            "description": "The address street",
-            "type": "string",
-            "nullable": false,
-            "example": "Rue Charlot"
-          },
-          "city": {
-            "description": "The address city",
-            "type": "string",
-            "nullable": false,
-            "example": "Paris"
-          },
-          "postalCode": {
-            "description": "The address postal code",
-            "type": "integer",
-            "format": "int32",
-            "nullable": false,
-            "example": 75003
-          },
-          "state": {
-            "description": "The address state",
-            "type": "string",
-            "nullable": true,
-            "example": "Île-de-France"
-          },
-          "country": {
-            "description": "The address country",
-            "type": "string",
-            "nullable": false,
-            "example": "France"
-          }
-        },
-        "required": [
-          "id",
-          "number",
-          "street",
-          "city",
-          "postalCode",
-          "country"
-        ]
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": false,
-            "example": 500
-          },
-          "message": {
-            "type": "string",
-            "nullable": false,
-            "example": "Internal Server Error"
-          },
-          "details": {
-            "type": "string",
-            "nullable": true,
-            "example": "Something went wrong, please try again later"
-          }
-        },
-        "required": [
-          "code",
-          "message"
         ]
       },
       "Cart": {
@@ -1561,6 +1494,204 @@
           "createdAt",
           "password",
           "type"
+        ]
+      },
+      "Order": {
+        "type": "object",
+        "description": "Represents a food.  \nWhen a food is added to the cart, and the customer validate the order, a new order is create.\n",
+        "properties": {
+          "id": {
+            "description": "The id of the order.",
+            "type": "string",
+            "nullable": false,
+            "example": "62a286acf7efe2aca2f8289e"
+          },
+          "customerId": {
+            "description": "The id of the customer who made the order.",
+            "type": "string",
+            "nullable": false,
+            "example": "70a286b5f7efe2aca2f828a1"
+          },
+          "courierId": {
+            "description": "The id of the courier who is handling the order. By default, the order is not handled.",
+            "type": "string",
+            "nullable": true,
+            "example": "87b8f7efe2aca2f828a262a2"
+          },
+          "restaurantId": {
+            "description": "The id of the restaurant that serves the food",
+            "type": "string",
+            "nullable": false,
+            "example": "93321f77bcf86cd799439055"
+          },
+          "foods": {
+            "description": "The list of foods in the order",
+            "nullable": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Food"
+            }
+          },
+          "total": {
+            "description": "The total price of the order",
+            "type": "number",
+            "nullable": false,
+            "example": 12.5
+          },
+          "status": {
+            "description": "The status of the order",
+            "type": "string",
+            "nullable": false,
+            "example": "pending",
+            "enum": [
+              "pending",
+              "validated",
+              "canceled"
+            ]
+          },
+          "acceptedAt": {
+            "description": "The date of the creation of the order",
+            "type": "string",
+            "format": "date-time",
+            "nullable": false,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "preparingTime": {
+            "description": "The time it takes to prepare the order (in minutes)",
+            "type": "number",
+            "nullable": true,
+            "example": 10
+          },
+          "deliveryTime": {
+            "description": "The time it takes to deliver the order to the customer (in minutes)",
+            "type": "number",
+            "nullable": true,
+            "example": 15
+          },
+          "deliveredAt": {
+            "description": "The date of the delivery of the order",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "canceledAt": {
+            "description": "The date of the cancellation of the order. By default, the order is not canceled.",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "paymentId": {
+            "description": "The payment of the order (by default, the order is not paid)",
+            "type": "string",
+            "nullable": true,
+            "example": "62a286acf7efe2aca2f8289e"
+          },
+          "deliveryAddress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The address of the delivery",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "customerId",
+          "restaurantId",
+          "foods",
+          "total",
+          "status",
+          "acceptedAt",
+          "deliveryAddress"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the address",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "number": {
+            "description": "The address number",
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "example": 5
+          },
+          "street": {
+            "description": "The address street",
+            "type": "string",
+            "nullable": false,
+            "example": "Rue Charlot"
+          },
+          "city": {
+            "description": "The address city",
+            "type": "string",
+            "nullable": false,
+            "example": "Paris"
+          },
+          "postalCode": {
+            "description": "The address postal code",
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 75003
+          },
+          "state": {
+            "description": "The address state",
+            "type": "string",
+            "nullable": true,
+            "example": "Île-de-France"
+          },
+          "country": {
+            "description": "The address country",
+            "type": "string",
+            "nullable": false,
+            "example": "France"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "street",
+          "city",
+          "postalCode",
+          "country"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "nullable": false,
+            "example": "Internal Server Error"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true,
+            "example": "Something went wrong, please try again later"
+          }
+        },
+        "required": [
+          "code",
+          "message"
         ]
       }
     },
