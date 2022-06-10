@@ -2,6 +2,6 @@ name: restaurantId
 in: path
 required: true
 example: 62f1l77bcf86cd799439011
-description: The id of the restaurant to retrieve
+description: The id of the restaurant to retrieve. Check Restaurant schema for more information.
 schema:
   type: string

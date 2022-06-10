@@ -10,7 +10,7 @@ content:
           example: "McDonald's"
         address:
           type: string
-          example: "1 rue de la paix, 75010 Paris"
+          example: "5 rue Charlot, 75003 Paris"
         tag:
           description: A list of tag of the restaurant
           type: array

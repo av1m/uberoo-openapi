@@ -2,6 +2,6 @@ name: foodId
 in: path
 required: true
 example: 60f1l27bcf126cd799439011
-description: The id of the food to retrieve
+description: The id of the food to retrieve. Check Food schema for more information.
 schema:
   type: string

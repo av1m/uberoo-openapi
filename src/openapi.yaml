@@ -48,6 +48,10 @@ paths:
     $ref: "./resources/foods.yaml"
   /restaurants/{restaurantId}/foods/{foodId}:
     $ref: "./resources/food.yaml"
+  /orders:
+    $ref: "./resources/orders.yaml"
+  /orders/{orderId}:
+    $ref: "./resources/order.yaml"
 components:
   parameters:
     $ref: "./parameters/_index.yaml"

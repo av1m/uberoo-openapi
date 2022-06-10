@@ -1,0 +1,90 @@
+type: object
+description: |
+  Represents a food.  
+  When a food is added to the cart, and the customer validate the order, a new order is create.
+properties:
+  id:
+    description: The id of the order.
+    type: string
+    nullable: false
+    example: "62a286acf7efe2aca2f8289e"
+  customerId:
+    description: The id of the customer who made the order.
+    type: string
+    nullable: false
+    example: "70a286b5f7efe2aca2f828a1"
+  courierId:
+    description: The id of the courier who is handling the order. By default, the order is not handled.
+    type: string
+    nullable: true
+    example: "87b8f7efe2aca2f828a262a2"
+  restaurantId:
+    description: The id of the restaurant that serves the food
+    type: string
+    nullable: false
+    example: "93321f77bcf86cd799439055"
+  foods:
+    description: The list of foods in the order
+    nullable: false
+    type: array
+    items:
+      $ref: "../schemas/Food.yaml"
+  total:
+    description: The total price of the order
+    type: number
+    nullable: false
+    example: 12.5
+  status:
+    description: The status of the order
+    type: string
+    nullable: false
+    example: "pending"
+    enum:
+      - pending
+      - validated
+      - canceled
+  acceptedAt:
+    description: The date of the creation of the order
+    type: string
+    format: date-time
+    nullable: false
+    example: "2020-01-01T00:00:00.000Z"
+  preparingTime:
+    description: The time it takes to prepare the order (in minutes)
+    type: number
+    nullable: true
+    example: 10
+  deliveryTime:
+    description: The time it takes to deliver the order to the customer (in minutes)
+    type: number
+    nullable: true
+    example: 15
+  deliveredAt:
+    description: The date of the delivery of the order
+    type: string
+    format: date-time
+    nullable: true
+    example: "2020-01-01T00:00:00.000Z"
+  canceledAt:
+    description: The date of the cancellation of the order. By default, the order is not canceled.
+    type: string
+    format: date-time
+    nullable: true
+    example: "2020-01-01T00:00:00.000Z"
+  deliveryAddress:
+    description: The address of the delivery
+    $ref: "../schemas/Address.yaml"
+  paymentId:
+    description: The payment of the order (by default, the order is not paid)
+    type: string
+    nullable: true
+    example: "62a286acf7efe2aca2f8289e"
+required:
+  - id
+  - customerId
+  - restaurantId
+  - foods
+  - total
+  - status
+  - acceptedAt
+  - deliveryAddress

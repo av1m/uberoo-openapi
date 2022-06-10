@@ -1,12 +1,14 @@
 Restaurant:
   $ref: "./Restaurant.yaml"
-Address:
-  $ref: "./Address.yaml"
-Error:
-  $ref: "./Error.yaml"
 Cart:
   $ref: "./Cart.yaml"
 Food:
   $ref: "./Food.yaml"
 User:
   $ref: "./User.yaml"
+Order:
+  $ref: "./Order.yaml"
+Address:
+  $ref: "./Address.yaml"
+Error:
+  $ref: "./Error.yaml"
