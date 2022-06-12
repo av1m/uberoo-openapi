@@ -48,7 +48,7 @@ tags:
   - name: issues
     description: "Manage issues and feedback"
 paths:
-  /restaurants/v1/:
+  /restaurants/v1:
     $ref: "./resources/restaurants.yaml"
   /restaurants/v1/{restaurantId}:
     $ref: "./resources/restaurant.yaml"
@@ -58,7 +58,7 @@ paths:
     $ref: "./resources/foods.yaml"
   /restaurants/v1/{restaurantId}/foods/{foodId}:
     $ref: "./resources/food.yaml"
-  /orders/v1/:
+  /orders/v1:
     $ref: "./resources/orders.yaml"
   /orders/v1/{orderId}:
     $ref: "./resources/order.yaml"
@@ -68,7 +68,7 @@ paths:
     $ref: "./resources/login.yaml"
   /accounts/v1/password:
     $ref: "./resources/password.yaml"
-  /users/v1/:
+  /users/v1:
     $ref: "./resources/users.yaml"
   /users/v1/{userId}:
     $ref: "./resources/user.yaml"
