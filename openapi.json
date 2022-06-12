@@ -72,7 +72,7 @@
     }
   ],
   "paths": {
-    "/restaurants/v1/": {
+    "/restaurants/v1": {
       "get": {
         "summary": "List all restaurants",
         "operationId": "getRestaurants",
@@ -285,7 +285,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -405,7 +405,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/paths/~1restaurants~1v1~1/post/requestBody"
+          "$ref": "#/paths/~1restaurants~1v1/post/requestBody"
         },
         "responses": {
           "200": {
@@ -937,7 +937,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -1185,7 +1185,7 @@
         }
       }
     },
-    "/orders/v1/": {
+    "/orders/v1": {
       "get": {
         "summary": "List orders",
         "operationId": "getOrders",
@@ -1746,7 +1746,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -1864,7 +1864,7 @@
         }
       }
     },
-    "/users/v1/": {
+    "/users/v1": {
       "get": {
         "summary": "List users",
         "operationId": "getUsers",
