@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Uberoo API",
-    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n\n# Authentication\n## Bearer\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
+    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [uberoo.eat](https://uberoo.eat) and developer documentation at [developers.uberoo.eat](https://developers.uberoo.eat).\n\n# Authentication\n## Bearer\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
     "version": "1.0.0",
     "termsOfService": "http://api.uberoo.eat/terms/",
     "contact": {
@@ -52,11 +52,15 @@
     },
     {
       "name": "accounts",
-      "description": "Manage accounts"
+      "description": "Manage accounts : authentication, registration, reset password"
+    },
+    {
+      "name": "users",
+      "description": "Manage users of Uberoo. Theses endpoints are for all users. Check specific type user for more information"
     },
     {
       "name": "payments",
-      "description": "Manage payments"
+      "description": "Manage payments of orders"
     },
     {
       "name": "notifications",
@@ -68,7 +72,7 @@
     }
   ],
   "paths": {
-    "/restaurants": {
+    "/restaurants/v1/": {
       "get": {
         "summary": "List all restaurants",
         "operationId": "getRestaurants",
@@ -281,7 +285,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "$ref": "#/paths/~1orders/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -295,7 +299,7 @@
         }
       }
     },
-    "/restaurants/{restaurantId}": {
+    "/restaurants/v1/{restaurantId}": {
       "get": {
         "summary": "Get a restaurant",
         "operationId": "getRestaurant",
@@ -306,9 +310,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/restaurantId"
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
@@ -404,7 +405,7 @@
           }
         ],
         "requestBody": {
-          "$ref": "#/paths/~1restaurants/post/requestBody"
+          "$ref": "#/paths/~1restaurants~1v1~1/post/requestBody"
         },
         "responses": {
           "200": {
@@ -444,7 +445,7 @@
         }
       }
     },
-    "/users/{userId}/carts": {
+    "/users/v1/{userId}/carts": {
       "get": {
         "summary": "Get the cart of the user passed in the path",
         "operationId": "getUserCart",
@@ -455,9 +456,6 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/userId"
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
@@ -692,7 +690,7 @@
         }
       }
     },
-    "/restaurants/{restaurantId}/foods": {
+    "/restaurants/v1/{restaurantId}/foods": {
       "get": {
         "summary": "Get all foods in a restaurant",
         "operationId": "getRestaurantFoods",
@@ -743,9 +741,6 @@
               "type": "boolean",
               "default": false
             }
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
@@ -942,7 +937,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "$ref": "#/paths/~1orders/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -1027,7 +1022,7 @@
         }
       }
     },
-    "/restaurants/{restaurantId}/foods/{foodId}": {
+    "/restaurants/v1/{restaurantId}/foods/{foodId}": {
       "get": {
         "summary": "Get a food item",
         "operationId": "getFood",
@@ -1041,9 +1036,6 @@
           },
           {
             "$ref": "#/components/parameters/foodId"
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
@@ -1193,7 +1185,7 @@
         }
       }
     },
-    "/orders": {
+    "/orders/v1/": {
       "get": {
         "summary": "List orders",
         "operationId": "getOrders",
@@ -1428,7 +1420,7 @@
         }
       }
     },
-    "/orders/{orderId}": {
+    "/orders/v1/{orderId}": {
       "get": {
         "summary": "Get an order",
         "operationId": "getOrder",
@@ -1446,9 +1438,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
@@ -1502,7 +1491,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/paths/~1orders~1%7BorderId%7D/get/parameters/0"
+            "$ref": "#/paths/~1orders~1v1~1%7BorderId%7D/get/parameters/0"
           }
         ],
         "security": [
@@ -1546,7 +1535,7 @@
         ],
         "parameters": [
           {
-            "$ref": "#/paths/~1orders~1%7BorderId%7D/get/parameters/0"
+            "$ref": "#/paths/~1orders~1v1~1%7BorderId%7D/get/parameters/0"
           }
         ],
         "security": [
@@ -1675,7 +1664,7 @@
         }
       }
     },
-    "/accounts/register": {
+    "/accounts/v1/register": {
       "post": {
         "summary": "Register",
         "description": "Register a new user to Uberoo",
@@ -1757,7 +1746,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "$ref": "#/paths/~1orders/post/responses/409"
+            "$ref": "#/paths/~1orders~1v1~1/post/responses/409"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -1768,7 +1757,7 @@
         }
       }
     },
-    "/accounts/login": {
+    "/accounts/v1/login": {
       "post": {
         "summary": "Login",
         "description": "Login with email and password to get a JWT token",
@@ -1828,7 +1817,7 @@
         }
       }
     },
-    "/accounts/password": {
+    "/accounts/v1/password": {
       "patch": {
         "summary": "Change password",
         "description": "Change password",
@@ -1874,6 +1863,333 @@
           }
         }
       }
+    },
+    "/users/v1/": {
+      "get": {
+        "summary": "List users",
+        "operationId": "getUsers",
+        "description": "Retrieve all the information about users according to the query parameters. You can use the 'filter' parameter to filter the results.",
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no users were found"
+          },
+          "205": {
+            "description": "Partial list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": "ONZoONbzr25kPMD0qM9kEzU="
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/users/v1/{userId}": {
+      "get": {
+        "summary": "Get an user",
+        "operationId": "getUser",
+        "description": "Retrieve all the information about a given user by its id",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected respaonse to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an user",
+        "operationId": "deleteUser",
+        "description": "Deletes the user with the specified ID. You must have the permission to delete the user",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an user",
+        "operationId": "updateUser",
+        "description": "Update the user with the specified ID",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "description": "The first name of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "description": "The last name of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "description": "The email of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "john@doe.com"
+                  },
+                  "phone": {
+                    "description": "The phone of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "0123456789"
+                  },
+                  "type": {
+                    "description": "The type of the user. You need to have the right to update this field.",
+                    "type": "string",
+                    "nullable": false,
+                    "default": "consumer",
+                    "example": "consumer",
+                    "enum": [
+                      "courier",
+                      "merchant",
+                      "consumer",
+                      "support",
+                      "admin"
+                    ]
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "The address of the user",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1893,7 +2209,7 @@
         "in": "path",
         "required": true,
         "example": "68f1l77bcf86cd799439011",
-        "description": "The id of the user to retrieve. Check User schema for more information.",
+        "description": "The id of the user to retrieve.\nIt exist a special value \"me\" that can be used to retrieve the current user.\nCheck User schema for more information.\n",
         "schema": {
           "type": "string"
         }
@@ -2114,7 +2430,7 @@
             ]
           },
           {
-            "$ref": "#/paths/~1restaurants~1%7BrestaurantId%7D~1foods/post/requestBody/content/application~1json/schema"
+            "$ref": "#/paths/~1restaurants~1v1~1%7BrestaurantId%7D~1foods/post/requestBody/content/application~1json/schema"
           }
         ]
       },
