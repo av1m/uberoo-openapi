@@ -49,6 +49,10 @@
     {
       "name": "orders",
       "description": "Manage orders of customers"
+    },
+    {
+      "name": "accounts",
+      "description": "Manage accounts"
     }
   ],
   "paths": {
@@ -74,7 +78,7 @@
           {
             "name": "nearest",
             "in": "query",
-            "description": "Filter restaurants by their distance from a specified location.\\n The specified location is specified by longitude and latitude. The distance is specified in meters.",
+            "description": "Filter restaurants by their distance from a specified location. The specified location is specified by longitude and latitude. The distance is specified in meters.",
             "required": true,
             "schema": {
               "description": "The longitude and latitude of the location to use as the center of the search. The longitude is in the range [-180,180] and the latitude is in the range [-90,90]. The default is the current location of the client.",
@@ -278,6 +282,21 @@
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The resource you want to update is in conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Conflict",
+                  "code": 409,
+                  "details": "There is a request conflicts with the current state of the server"
+                }
+              }
+            }
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -909,6 +928,9 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           },
+          "409": {
+            "$ref": "#/paths/~1restaurants/post/responses/409"
+          },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
           },
@@ -1151,6 +1173,206 @@
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/register": {
+      "post": {
+        "summary": "Register",
+        "description": "Register a new user to Uberoo",
+        "operationId": "register",
+        "tags": [
+          "accounts"
+        ],
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User object needed to register",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@doe.fr"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Azerty123"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Valid values are User's type. Depending on the type of account to be created, the user must have certain rights.For example, a customer account cannot create an admin account."
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "5 Rue Charlot, 75003 Paris France"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successful, return a User object with a JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/paths/~1restaurants/post/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Login with email and password to get a JWT token",
+        "operationId": "login",
+        "tags": [
+          "accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@doe.fr"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Azerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/change-password": {
+      "post": {
+        "summary": "Change password",
+        "description": "Change password",
+        "operationId": "changePassword",
+        "tags": [
+          "accounts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "password": "Azerty123@"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The password has been changed"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -1470,7 +1692,8 @@
               "courier",
               "merchant",
               "consumer",
-              "support"
+              "support",
+              "admin"
             ]
           },
           "address": {
