@@ -1,0 +1,61 @@
+post:
+  summary: Register
+  description: Register a new user to Uberoo
+  operationId: register
+  tags:
+    - accounts
+  security:
+    - {}
+    - bearerAuth: []
+  requestBody:
+    description: "User object needed to register"
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: "John"
+            lastName:
+              type: string
+              example: "Doe"
+            email:
+              type: string
+              format: email
+              example: "john@doe.fr"
+            password:
+              type: string
+              example: "Azerty123"
+            type:
+              type: string
+              description: "Valid values are User's type. Depending on the type of account to be created, the user must have certain rights.For example, a customer account cannot create an admin account."
+            address:
+              type: string
+              example: "5 Rue Charlot, 75003 Paris France"
+  responses:
+    "201":
+      description: "Registration successful, return a User object with a JWT token"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              user:
+                $ref: "../schemas/User.yaml"
+              token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "409":
+      $ref: "../responses/Conflict.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

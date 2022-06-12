@@ -1,0 +1,9 @@
+description: "The resource you want to update is in conflict"
+content:
+  application/json:
+    schema:
+      $ref: "../schemas/Error.yaml"
+    example:
+      message: "Conflict"
+      code: 409
+      details: "There is a request conflicts with the current state of the server"

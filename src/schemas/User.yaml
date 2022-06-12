@@ -47,6 +47,7 @@ properties:
       - "merchant"
       - "consumer"
       - "support"
+      - "admin"
   address:
     anyOf:
       - $ref: "./Address.yaml"

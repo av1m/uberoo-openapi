@@ -103,6 +103,8 @@ post:
       $ref: "../responses/Forbidden.yaml"
     "404":
       $ref: "../responses/NotFound.yaml"
+    "409":
+      $ref: "../responses/Conflict.yaml"
     "422":
       $ref: "../responses/ValidationFailed.yaml"
     "429":

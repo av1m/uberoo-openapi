@@ -1,0 +1,38 @@
+post:
+  summary: Login
+  description: Login with email and password to get a JWT token
+  operationId: login
+  tags:
+    - accounts
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+              example: "john@doe.fr"
+            password:
+              type: string
+              example: "Azerty123"
+  responses:
+    "200":
+      description: "Login successful"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

@@ -15,7 +15,7 @@ get:
     - name: "nearest"
       in: "query"
       description:
-        Filter restaurants by their distance from a specified location.\n
+        Filter restaurants by their distance from a specified location.
         The specified location is specified by longitude and latitude.
         The distance is specified in meters.
       required: true
@@ -115,6 +115,8 @@ post:
       $ref: "../responses/NotAuthorized.yaml"
     "403":
       $ref: "../responses/Forbidden.yaml"
+    "409":
+      $ref: "../responses/Conflict.yaml"
     "422":
       $ref: "../responses/ValidationFailed.yaml"
     "429":

@@ -37,6 +37,8 @@ tags:
     description: "Manage carts / baskets of customers"
   - name: orders
     description: "Manage orders of customers"
+  - name: accounts
+    description: "Manage accounts"
 paths:
   /restaurants:
     $ref: "./resources/restaurants.yaml"
@@ -52,6 +54,12 @@ paths:
     $ref: "./resources/orders.yaml"
   /orders/{orderId}:
     $ref: "./resources/order.yaml"
+  /accounts/register:
+    $ref: "./resources/register.yaml"
+  /accounts/login:
+    $ref: "./resources/login.yaml"
+  /accounts/change-password:
+    $ref: "./resources/change-password.yaml"
 components:
   parameters:
     $ref: "./parameters/_index.yaml"
