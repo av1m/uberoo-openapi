@@ -39,6 +39,12 @@ tags:
     description: "Manage orders of customers"
   - name: accounts
     description: "Manage accounts"
+  - name: payments
+    description: "Manage payments"
+  - name: notifications
+    description: "Manage all notifications, including push notifications, email, SMS and Webhook"
+  - name: issues
+    description: "Manage issues and feedback"
 paths:
   /restaurants:
     $ref: "./resources/restaurants.yaml"
