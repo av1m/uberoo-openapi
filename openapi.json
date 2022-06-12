@@ -53,6 +53,18 @@
     {
       "name": "accounts",
       "description": "Manage accounts"
+    },
+    {
+      "name": "payments",
+      "description": "Manage payments"
+    },
+    {
+      "name": "notifications",
+      "description": "Manage all notifications, including push notifications, email, SMS and Webhook"
+    },
+    {
+      "name": "issues",
+      "description": "Manage issues and feedback"
     }
   ],
   "paths": {
@@ -87,6 +99,12 @@
             }
           },
           {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
             "$ref": "#/components/parameters/limit"
           },
           {
@@ -94,15 +112,6 @@
           },
           {
             "$ref": "#/components/parameters/order"
-          },
-          {
-            "$ref": "#/components/parameters/sort"
-          },
-          {
-            "$ref": "#/components/parameters/field"
-          },
-          {
-            "$ref": "#/components/parameters/filter"
           }
         ],
         "responses": {
@@ -175,19 +184,7 @@
             "$ref": "#/components/responses/NotModified"
           },
           "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "message": "Bad Request",
-                  "code": 400,
-                  "details": "The request was malformed"
-                }
-              }
-            }
+            "$ref": "#/components/responses/BadRequest"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -200,7 +197,7 @@
       "post": {
         "summary": "Create a new restaurant",
         "operationId": "createRestaurant",
-        "description": "Create a new restaurant. The restaurant will not be returned in the response",
+        "description": "Create a new restaurant. The restaurant will be returned in the response",
         "tags": [
           "restaurants"
         ],
@@ -284,19 +281,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "description": "The resource you want to update is in conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "example": {
-                  "message": "Conflict",
-                  "code": 409,
-                  "details": "There is a request conflicts with the current state of the server"
-                }
-              }
-            }
+            "$ref": "#/paths/~1orders/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -323,21 +308,18 @@
             "$ref": "#/components/parameters/restaurantId"
           },
           {
-            "$ref": "#/components/parameters/field"
-          },
-          {
             "$ref": "#/components/parameters/filter"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/field"
           },
           {
-            "$ref": "#/components/parameters/sort"
+            "$ref": "#/components/parameters/order"
           }
         ],
         "responses": {
           "200": {
-            "description": "Expected response to a valid request",
+            "description": "Expected respaonse to a valid request",
             "content": {
               "application/json": {
                 "schema": {
@@ -475,16 +457,13 @@
             "$ref": "#/components/parameters/userId"
           },
           {
-            "$ref": "#/components/parameters/field"
-          },
-          {
             "$ref": "#/components/parameters/filter"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/field"
           },
           {
-            "$ref": "#/components/parameters/sort"
+            "$ref": "#/components/parameters/order"
           }
         ],
         "security": [
@@ -766,16 +745,19 @@
             }
           },
           {
-            "$ref": "#/components/parameters/order"
-          },
-          {
-            "$ref": "#/components/parameters/sort"
+            "$ref": "#/components/parameters/filter"
           },
           {
             "$ref": "#/components/parameters/field"
           },
           {
-            "$ref": "#/components/parameters/filter"
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
           }
         ],
         "responses": {
@@ -812,6 +794,37 @@
           },
           "204": {
             "description": "The query was successful but no foods were found"
+          },
+          "205": {
+            "description": "A partial list of foods associated with the restaurant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Food"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "304": {
             "$ref": "#/components/responses/NotModified"
@@ -929,7 +942,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "$ref": "#/paths/~1restaurants/post/responses/409"
+            "$ref": "#/paths/~1orders/post/responses/409"
           },
           "422": {
             "$ref": "#/components/responses/ValidationFailed"
@@ -1030,16 +1043,13 @@
             "$ref": "#/components/parameters/foodId"
           },
           {
-            "$ref": "#/components/parameters/field"
-          },
-          {
             "$ref": "#/components/parameters/filter"
           },
           {
-            "$ref": "#/components/parameters/order"
+            "$ref": "#/components/parameters/field"
           },
           {
-            "$ref": "#/components/parameters/sort"
+            "$ref": "#/components/parameters/order"
           }
         ],
         "responses": {
@@ -1183,6 +1193,488 @@
         }
       }
     },
+    "/orders": {
+      "get": {
+        "summary": "List orders",
+        "operationId": "getOrders",
+        "description": "Retrieve all the information about orders according to the query parameters. You can use the 'filter' parameter to filter the results.",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "query",
+            "description": "Filter orders by their restaurant id",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "example": [
+                "507f1f77bcf86cd799439011",
+                "507f191e810c19729de860ea"
+              ]
+            }
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "description": "Filter orders by their customer id",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "example": [
+                "507f1f77bcf86cd799439011",
+                "507f191e810c19729de860ea"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no orders were found"
+          },
+          "205": {
+            "description": "Partial list of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": "KJVkKJxvn25gLIZ0mI9gAvQ="
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new order",
+        "operationId": "createOrder",
+        "description": "Create a new order. The order will be returned in the response",
+        "tags": [
+          "orders"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Order object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "description": "The id of the customer who made the order.",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "70a286b5f7efe2aca2f828a1"
+                  },
+                  "restaurantId": {
+                    "description": "The id of the restaurant that serves the food",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "93321f77bcf86cd799439055"
+                  },
+                  "foods": {
+                    "description": "The list of foods id in the order",
+                    "nullable": false,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "62a286acf7efe2aca2f8289e"
+                    }
+                  },
+                  "deliveryAddress": {
+                    "type": "string",
+                    "description": "The address of the delivery",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  }
+                },
+                "required": [
+                  "customerId",
+                  "restaurantId",
+                  "foods",
+                  "deliveryAddress"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The resource you want to update is in conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Conflict",
+                  "code": 409,
+                  "details": "There is a request conflicts with the current state of the server"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "summary": "Get an order",
+        "operationId": "getOrder",
+        "description": "Retrieve all the information about a given order by its id",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "example": "62a286acf7efe2aca2f8289e",
+            "description": "The id of the order to retrieve. Check Order schema for more information.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected respaonse to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an order",
+        "operationId": "deleteOrder",
+        "description": "Deletes the order with the specified ID. You must have the permission to delete the order",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1orders~1%7BorderId%7D/get/parameters/0"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Order was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an order",
+        "operationId": "updateOrder",
+        "description": "Update the order with the specified ID",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1orders~1%7BorderId%7D/get/parameters/0"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Order update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foods": {
+                    "description": "The list of foods id in the order",
+                    "nullable": false,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "62a286acf7efe2aca2f8289e"
+                    }
+                  },
+                  "deliveryAddress": {
+                    "type": "string",
+                    "description": "The address of the delivery",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  },
+                  "courierId": {
+                    "description": "The id of the courier who is handling the order. By default, the order is not handled.",
+                    "type": "string",
+                    "nullable": true,
+                    "example": "87b8f7efe2aca2f828a262a2"
+                  },
+                  "status": {
+                    "description": "The status of the order",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "pending",
+                    "enum": [
+                      "pending",
+                      "validated",
+                      "canceled"
+                    ]
+                  },
+                  "acceptedAt": {
+                    "description": "The date of the creation of the order",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": false,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "preparingTime": {
+                    "description": "The time it takes to prepare the order (in minutes)",
+                    "type": "number",
+                    "nullable": true,
+                    "example": 10
+                  },
+                  "deliveryTime": {
+                    "description": "The time it takes to deliver the order to the customer (in minutes)",
+                    "type": "number",
+                    "nullable": true,
+                    "example": 15
+                  },
+                  "deliveredAt": {
+                    "description": "The date of the delivery of the order",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "canceledAt": {
+                    "description": "The date of the cancellation of the order. By default, the order is not canceled.",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "paymentId": {
+                    "description": "The payment of the order (by default, the order is not paid)",
+                    "type": "string",
+                    "nullable": true,
+                    "example": "62a286acf7efe2aca2f8289e"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
     "/accounts/register": {
       "post": {
         "summary": "Register",
@@ -1265,7 +1757,7 @@
             "$ref": "#/components/responses/Forbidden"
           },
           "409": {
-            "$ref": "#/paths/~1restaurants/post/responses/409"
+            "$ref": "#/paths/~1orders/post/responses/409"
           },
           "429": {
             "$ref": "#/components/responses/TooManyRequest"
@@ -1336,8 +1828,8 @@
         }
       }
     },
-    "/accounts/change-password": {
-      "post": {
+    "/accounts/password": {
+      "patch": {
         "summary": "Change password",
         "description": "Change password",
         "operationId": "changePassword",
@@ -1453,16 +1945,6 @@
           ]
         }
       },
-      "sort": {
-        "name": "sort",
-        "in": "query",
-        "description": "Returned data sort",
-        "required": false,
-        "schema": {
-          "type": "string",
-          "default": "id"
-        }
-      },
       "field": {
         "name": "fields",
         "in": "query",
@@ -1482,10 +1964,10 @@
         "name": "filter",
         "in": "query",
         "required": false,
-        "description": "The filter to apply to the data (e.g. 'name:John'). We can use :\n- 'or' operator to combine filters (e.g. 'name:John or name:Doe').\n- 'and' operator to combine filters (e.g. 'name:Doe and firstname:John').\n- '\\*' wildcard operator to match any string (e.g. 'name:John\\*' will match 'John' and 'John Doe')\n",
+        "description": "The (advanced) filter to apply to the data (e.g. 'name:John'). We can use :\n- `or` operator to combine filters (e.g. 'name:John or name:Doe').\n- `and` operator to combine filters (e.g. 'name:Doe and firstname:John').\n- `*` wildcard operator to match any string (e.g. 'name:John\\*' will match 'John' and 'John Doe')\n- `!` operator to negate a filter (e.g. '!name:John' will match all records except 'John')\n- `>` operator to get records with a value greater than a given value (e.g. 'name:John>10' will match records with a name greater than 'John' and 'John Doe')\n- `<` operator to get records with a value less than a given value (e.g. 'name:John<10' will match records with a name less than 'John' and 'John Doe')\n- `>=` operator to get records with a value greater than or equal to a given value (e.g. 'name:John>=10' will match records with a name greater than or equal to 'John' and 'John Doe')\n- `<=` operator to get records with a value less than or equal to a given value (e.g. 'name:John<=10' will match records with a name less than or equal to 'John' and 'John Doe')\n",
         "schema": {
           "type": "string",
-          "example": "name:John",
+          "example": "(firstname:John or firstname:Kevin) and age:>18 and name:Du*t",
           "minLength": 3,
           "maxLength": 255
         }
