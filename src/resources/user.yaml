@@ -1,11 +1,11 @@
 get:
-  summary: "Get an order"
-  operationId: getOrder
-  description: "Retrieve all the information about a given order by its id"
+  summary: "Get an user"
+  operationId: getUser
+  description: "Retrieve all the information about a given user by its id"
   tags:
-    - orders
+    - users
   parameters:
-    - $ref: "../parameters/path/orderId.yaml"
+    - $ref: "../parameters/path/userId.yaml"
     - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/order.yaml"
   security:
@@ -16,7 +16,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/Order.yaml"
+            $ref: "../schemas/User.yaml"
     "304":
       $ref: "../responses/NotModified.yaml"
     "401":
@@ -30,18 +30,18 @@ get:
     default:
       $ref: "../responses/UnexpectedError.yaml"
 delete:
-  summary: "Delete an order"
-  operationId: deleteOrder
-  description: "Deletes the order with the specified ID. You must have the permission to delete the order"
+  summary: "Delete an user"
+  operationId: deleteUser
+  description: "Deletes the user with the specified ID. You must have the permission to delete the user"
   tags:
-    - orders
+    - users
   parameters:
-    - $ref: "../parameters/path/orderId.yaml"
+    - $ref: "../parameters/path/userId.yaml"
   security:
     - bearerAuth: []
   responses:
     "204":
-      description: "Order was deleted"
+      description: "User was deleted"
     "304":
       $ref: "../responses/NotModified.yaml"
     "401":
@@ -57,24 +57,24 @@ delete:
     default:
       $ref: "../responses/UnexpectedError.yaml"
 patch:
-  summary: "Update an order"
-  operationId: updateOrder
-  description: "Update the order with the specified ID"
+  summary: "Update an user"
+  operationId: updateUser
+  description: "Update the user with the specified ID"
   tags:
-    - orders
+    - users
   parameters:
-    - $ref: "../parameters/path/orderId.yaml"
+    - $ref: "../parameters/path/userId.yaml"
   security:
     - bearerAuth: []
   requestBody:
-    $ref: "../requestBody/orderUpdate.yaml"
+    $ref: "../requestBody/userUpdate.yaml"
   responses:
     "200":
-      description: "Order was updated"
+      description: "User was updated"
       content:
         application/json:
           schema:
-            $ref: "../schemas/Order.yaml"
+            $ref: "../schemas/User.yaml"
     "304":
       $ref: "../responses/NotModified.yaml"
     "400":

@@ -1,0 +1,43 @@
+description: "User update object"
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        firstName:
+          description: The first name of the user
+          type: string
+          nullable: false
+          example: "John"
+        lastName:
+          description: The last name of the user
+          type: string
+          nullable: false
+          example: "Doe"
+        email:
+          description: The email of the user
+          type: string
+          nullable: false
+          example: "john@doe.com"
+        phone:
+          description: The phone of the user
+          type: string
+          nullable: false
+          example: "0123456789"
+        type:
+          description: The type of the user. You need to have the right to update this field.
+          type: string
+          nullable: false
+          default: "consumer"
+          example: "consumer"
+          enum:
+            - "courier"
+            - "merchant"
+            - "consumer"
+            - "support"
+            - "admin"
+        address:
+          type: string
+          description: The address of the user
+          example: "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"

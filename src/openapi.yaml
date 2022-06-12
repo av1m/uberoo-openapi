@@ -3,7 +3,7 @@ info:
   title: Uberoo API
   description: |
     To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  
-    You can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).
+    You can find out more about Uberoo at [uberoo.eat](https://uberoo.eat) and developer documentation at [developers.uberoo.eat](https://developers.uberoo.eat).
 
     # Authentication
     ## Bearer
@@ -38,34 +38,40 @@ tags:
   - name: orders
     description: "Manage orders of customers"
   - name: accounts
-    description: "Manage accounts"
+    description: "Manage accounts : authentication, registration, reset password"
+  - name: users
+    description: "Manage users of Uberoo. Theses endpoints are for all users. Check specific type user for more information"
   - name: payments
-    description: "Manage payments"
+    description: "Manage payments of orders"
   - name: notifications
     description: "Manage all notifications, including push notifications, email, SMS and Webhook"
   - name: issues
     description: "Manage issues and feedback"
 paths:
-  /restaurants:
+  /restaurants/v1/:
     $ref: "./resources/restaurants.yaml"
-  /restaurants/{restaurantId}:
+  /restaurants/v1/{restaurantId}:
     $ref: "./resources/restaurant.yaml"
-  /users/{userId}/carts:
+  /users/v1/{userId}/carts:
     $ref: "./resources/carts.yaml"
-  /restaurants/{restaurantId}/foods:
+  /restaurants/v1/{restaurantId}/foods:
     $ref: "./resources/foods.yaml"
-  /restaurants/{restaurantId}/foods/{foodId}:
+  /restaurants/v1/{restaurantId}/foods/{foodId}:
     $ref: "./resources/food.yaml"
-  /orders:
+  /orders/v1/:
     $ref: "./resources/orders.yaml"
-  /orders/{orderId}:
+  /orders/v1/{orderId}:
     $ref: "./resources/order.yaml"
-  /accounts/register:
+  /accounts/v1/register:
     $ref: "./resources/register.yaml"
-  /accounts/login:
+  /accounts/v1/login:
     $ref: "./resources/login.yaml"
-  /accounts/password:
+  /accounts/v1/password:
     $ref: "./resources/password.yaml"
+  /users/v1/:
+    $ref: "./resources/users.yaml"
+  /users/v1/{userId}:
+    $ref: "./resources/user.yaml"
 components:
   parameters:
     $ref: "./parameters/_index.yaml"

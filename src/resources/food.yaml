@@ -7,7 +7,6 @@ get:
   parameters:
     - $ref: "../parameters/path/restaurantId.yaml"
     - $ref: "../parameters/path/foodId.yaml"
-    - $ref: "../parameters/query/filter.yaml"
     - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/order.yaml"
   responses:

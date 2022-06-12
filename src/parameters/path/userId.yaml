@@ -2,6 +2,9 @@ name: userId
 in: path
 required: true
 example: 68f1l77bcf86cd799439011
-description: The id of the user to retrieve. Check User schema for more information.
+description: |
+  The id of the user to retrieve.
+  It exist a special value "me" that can be used to retrieve the current user.
+  Check User schema for more information.
 schema:
   type: string
