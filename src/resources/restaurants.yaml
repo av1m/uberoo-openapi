@@ -27,12 +27,11 @@ get:
         type: "string"
         default: "48.8701419,2.271431"
 
+    - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/limit.yaml"
     - $ref: "../parameters/query/offset.yaml"
     - $ref: "../parameters/query/order.yaml"
-    - $ref: "../parameters/query/sort.yaml"
-    - $ref: "../parameters/query/field.yaml"
-    - $ref: "../parameters/query/filter.yaml"
   responses:
     "200":
       description: A list of restaurants
@@ -79,15 +78,7 @@ get:
     "304":
       $ref: "../responses/NotModified.yaml"
     "400":
-      description: "Bad request"
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/Error.yaml"
-          example:
-            message: "Bad Request"
-            code: 400
-            details: "The request was malformed"
+      $ref: "../responses/BadRequest.yaml"
     "429":
       $ref: "../responses/TooManyRequest.yaml"
     default:
@@ -95,7 +86,7 @@ get:
 post:
   summary: "Create a new restaurant"
   operationId: createRestaurant
-  description: "Create a new restaurant. The restaurant will not be returned in the response"
+  description: "Create a new restaurant. The restaurant will be returned in the response"
   tags:
     - restaurants
   security:

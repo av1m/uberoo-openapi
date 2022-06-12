@@ -6,10 +6,9 @@ get:
     - carts
   parameters:
     - $ref: "../parameters/path/userId.yaml"
-    - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/order.yaml"
-    - $ref: "../parameters/query/sort.yaml"
   security:
     - bearerAuth: []
   responses:

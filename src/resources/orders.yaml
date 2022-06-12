@@ -1,0 +1,108 @@
+get:
+  summary: List orders
+  operationId: getOrders
+  description: "Retrieve all the information about orders according to the query parameters. You can use the 'filter' parameter to filter the results."
+  tags:
+    - orders
+  parameters:
+    - name: "restaurantId"
+      in: "query"
+      description: "Filter orders by their restaurant id"
+      required: false
+      schema:
+        type: "array"
+        example: ["507f1f77bcf86cd799439011", "507f191e810c19729de860ea"]
+    - name: "customerId"
+      in: "query"
+      description: "Filter orders by their customer id"
+      required: false
+      schema:
+        type: "array"
+        example: ["507f1f77bcf86cd799439011", "507f191e810c19729de860ea"]
+    - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/limit.yaml"
+    - $ref: "../parameters/query/offset.yaml"
+    - $ref: "../parameters/query/order.yaml"
+  responses:
+    "200":
+      description: A list of orders
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../schemas/Order.yaml"
+              pagination:
+                type: object
+                properties:
+                  endCursor:
+                    type: string
+                    example: ""
+                  hasNextPage:
+                    type: boolean
+                    example: false
+    "204":
+      description: "The query was successful but no orders were found"
+    "205":
+      description: "Partial list of orders"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../schemas/Order.yaml"
+              pagination:
+                type: object
+                properties:
+                  endCursor:
+                    type: string
+                    example: "KJVkKJxvn25gLIZ0mI9gAvQ="
+                  hasNextPage:
+                    type: boolean
+                    example: true
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+post:
+  summary: "Create a new order"
+  operationId: createOrder
+  description: "Create a new order. The order will be returned in the response"
+  tags:
+    - orders
+  security:
+    - bearerAuth: []
+  requestBody:
+    $ref: "../requestBody/order.yaml"
+  responses:
+    "201":
+      description: "Order was created"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Order.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "409":
+      $ref: "../responses/Conflict.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

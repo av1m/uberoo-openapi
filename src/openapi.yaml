@@ -64,8 +64,8 @@ paths:
     $ref: "./resources/register.yaml"
   /accounts/login:
     $ref: "./resources/login.yaml"
-  /accounts/change-password:
-    $ref: "./resources/change-password.yaml"
+  /accounts/password:
+    $ref: "./resources/password.yaml"
 components:
   parameters:
     $ref: "./parameters/_index.yaml"

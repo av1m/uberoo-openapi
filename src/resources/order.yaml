@@ -1,0 +1,94 @@
+get:
+  summary: "Get an order"
+  operationId: getOrder
+  description: "Retrieve all the information about a given order by its id"
+  tags:
+    - orders
+  parameters:
+    - $ref: "../parameters/path/orderId.yaml"
+    - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/order.yaml"
+  security:
+    - bearerAuth: []
+  responses:
+    "200":
+      description: "Expected respaonse to a valid request"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Order.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+delete:
+  summary: "Delete an order"
+  operationId: deleteOrder
+  description: "Deletes the order with the specified ID. You must have the permission to delete the order"
+  tags:
+    - orders
+  parameters:
+    - $ref: "../parameters/path/orderId.yaml"
+  security:
+    - bearerAuth: []
+  responses:
+    "204":
+      description: "Order was deleted"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"
+patch:
+  summary: "Update an order"
+  operationId: updateOrder
+  description: "Update the order with the specified ID"
+  tags:
+    - orders
+  parameters:
+    - $ref: "../parameters/path/orderId.yaml"
+  security:
+    - bearerAuth: []
+  requestBody:
+    $ref: "../requestBody/orderUpdate.yaml"
+  responses:
+    "200":
+      description: "Order was updated"
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/Order.yaml"
+    "304":
+      $ref: "../responses/NotModified.yaml"
+    "400":
+      $ref: "../responses/BadRequest.yaml"
+    "401":
+      $ref: "../responses/NotAuthorized.yaml"
+    "403":
+      $ref: "../responses/Forbidden.yaml"
+    "404":
+      $ref: "../responses/NotFound.yaml"
+    "422":
+      $ref: "../responses/ValidationFailed.yaml"
+    "429":
+      $ref: "../responses/TooManyRequest.yaml"
+    default:
+      $ref: "../responses/UnexpectedError.yaml"

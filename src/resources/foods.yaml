@@ -34,10 +34,11 @@ get:
       schema:
         type: "boolean"
         default: false
-    - $ref: "../parameters/query/order.yaml"
-    - $ref: "../parameters/query/sort.yaml"
-    - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/field.yaml"
+    - $ref: "../parameters/query/limit.yaml"
+    - $ref: "../parameters/query/offset.yaml"
+    - $ref: "../parameters/query/order.yaml"
   responses:
     "200":
       description: A list of foods associated with the restaurant
@@ -61,6 +62,26 @@ get:
                     example: false
     "204":
       description: "The query was successful but no foods were found"
+    "205":
+      description: A partial list of foods associated with the restaurant
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../schemas/Food.yaml"
+              pagination:
+                type: object
+                properties:
+                  endCursor:
+                    type: string
+                    example: ""
+                  hasNextPage:
+                    type: boolean
+                    example: true
     "304":
       $ref: "../responses/NotModified.yaml"
     "400":

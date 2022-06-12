@@ -1,0 +1,7 @@
+name: orderId
+in: path
+required: true
+example: 62a286acf7efe2aca2f8289e
+description: The id of the order to retrieve. Check Order schema for more information.
+schema:
+  type: string

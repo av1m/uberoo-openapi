@@ -13,8 +13,6 @@ limit:
   $ref: "./query/limit.yaml"
 order:
   $ref: "./query/order.yaml"
-sort:
-  $ref: "./query/sort.yaml"
 field:
   $ref: "./query/field.yaml"
 filter:

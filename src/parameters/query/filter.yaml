@@ -2,12 +2,17 @@ name: "filter"
 in: "query"
 required: false
 description: |
-  The filter to apply to the data (e.g. 'name:John'). We can use :
-  - 'or' operator to combine filters (e.g. 'name:John or name:Doe').
-  - 'and' operator to combine filters (e.g. 'name:Doe and firstname:John').
-  - '\*' wildcard operator to match any string (e.g. 'name:John\*' will match 'John' and 'John Doe')
+  The (advanced) filter to apply to the data (e.g. 'name:John'). We can use :
+  - `or` operator to combine filters (e.g. 'name:John or name:Doe').
+  - `and` operator to combine filters (e.g. 'name:Doe and firstname:John').
+  - `*` wildcard operator to match any string (e.g. 'name:John\*' will match 'John' and 'John Doe')
+  - `!` operator to negate a filter (e.g. '!name:John' will match all records except 'John')
+  - `>` operator to get records with a value greater than a given value (e.g. 'name:John>10' will match records with a name greater than 'John' and 'John Doe')
+  - `<` operator to get records with a value less than a given value (e.g. 'name:John<10' will match records with a name less than 'John' and 'John Doe')
+  - `>=` operator to get records with a value greater than or equal to a given value (e.g. 'name:John>=10' will match records with a name greater than or equal to 'John' and 'John Doe')
+  - `<=` operator to get records with a value less than or equal to a given value (e.g. 'name:John<=10' will match records with a name less than or equal to 'John' and 'John Doe')
 schema:
   type: "string"
-  example: "name:John"
+  example: "(firstname:John or firstname:Kevin) and age:>18 and name:Du*t"
   minLength: 3
   maxLength: 255

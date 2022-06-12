@@ -1,0 +1,33 @@
+description: "Order object"
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        customerId:
+          description: The id of the customer who made the order.
+          type: string
+          nullable: false
+          example: "70a286b5f7efe2aca2f828a1"
+        restaurantId:
+          description: The id of the restaurant that serves the food
+          type: string
+          nullable: false
+          example: "93321f77bcf86cd799439055"
+        foods:
+          description: The list of foods id in the order
+          nullable: false
+          type: array
+          items:
+            type: string
+            example: "62a286acf7efe2aca2f8289e"
+        deliveryAddress:
+          type: string
+          description: The address of the delivery
+          example: "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+      required:
+        - customerId
+        - restaurantId
+        - foods
+        - deliveryAddress
