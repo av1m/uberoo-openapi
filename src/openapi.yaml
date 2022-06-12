@@ -6,7 +6,7 @@ info:
     You can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).
 
     # Authentication
-    ## JWT
+    ## Bearer
     To authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  
     To find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  
     You can generate a JWT token using the `/account/login` endpoint.
