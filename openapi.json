@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Uberoo API",
-    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n\n# Authentication\n## JWT\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
+    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [http://uberoo.eat](uberoo.eat).\n\n# Authentication\n## Bearer\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
     "version": "1.0.0",
     "termsOfService": "http://api.uberoo.eat/terms/",
     "contact": {
