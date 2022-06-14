@@ -10,6 +10,7 @@
     "build": "swagger-cli bundle src/openapi.yaml --outfile .build/openapi.$npm_package_config_extension --type $npm_package_config_extension",
     "watch": "node index.js",
     "start": "npm run swagger-docker && npm run watch",
+    "stop": "docker-compose down",
     "test": "npm run build && swagger-cli validate .build/openapi.$npm_package_config_extension && spectral lint .build/openapi.$npm_package_config_extension",
     "clean": "rm -r .build",
     "swagger-docker": "docker-compose up -d",
