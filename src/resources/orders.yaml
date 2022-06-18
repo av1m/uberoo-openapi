@@ -12,7 +12,7 @@ get:
       schema:
         type: "array"
         example: ["507f1f77bcf86cd799439011", "507f191e810c19729de860ea"]
-    - name: "customerId"
+    - name: "personId"
       in: "query"
       description: "Filter orders by their customer id"
       required: false

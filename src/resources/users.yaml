@@ -8,6 +8,7 @@ get:
     - bearerAuth: []
   parameters:
     - $ref: "../parameters/query/filter.yaml"
+    - $ref: "../parameters/query/nearest.yaml"
     - $ref: "../parameters/query/field.yaml"
     - $ref: "../parameters/query/limit.yaml"
     - $ref: "../parameters/query/offset.yaml"

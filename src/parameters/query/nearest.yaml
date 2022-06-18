@@ -1,0 +1,13 @@
+name: "nearest"
+in: "query"
+description: Filter the resource by their distance from a specified location.
+  The specified location is specified by longitude and latitude.
+  The distance is specified in meters.
+required: true
+schema:
+  type: "string"
+  description:
+    The longitude and latitude of the location to use as the center of the search.
+    The longitude is in the range [-180,180] and the latitude is in the range [-90,90].
+    The default is the current location of the client.
+  default: "48.8701419,2.271431"

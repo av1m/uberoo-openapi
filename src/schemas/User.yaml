@@ -48,6 +48,22 @@ properties:
       - "consumer"
       - "support"
       - "admin"
+  isAvailable:
+    description: The availability of the user, can be true only if the user is a courier
+    type: boolean
+    nullable: true
+    default: false
+    example: false
+  orders:
+    description: The list of orders of the user, can be filled only if the user is a consumer/merchant/courier
+    nullable: true
+    example: ["507f1f77bcf86cd799439011", "507f1f77bcf86cd799439012"]
+    type: array
+    items:
+      anyOf:
+        - $ref: "./Order.yaml"
+        - type: string
+          description: The id of the order
   address:
     anyOf:
       - $ref: "./Address.yaml"
