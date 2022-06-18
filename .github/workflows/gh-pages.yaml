@@ -22,7 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Test
-        run: npm run test
+        run: |
+          npm run use-yaml
+          npm run test
       - name: Build
         run: npm run redoc-html
       - name: Deploy 🚀
@@ -30,3 +32,8 @@ jobs:
         with:
           branch: gh-pages
           folder: .build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: openapi.yaml
+          path: .build/openapi.yaml

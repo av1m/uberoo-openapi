@@ -24,7 +24,7 @@ content:
           description: The phone of the user
           type: string
           nullable: false
-          example: "0123456789"
+          example: "+33123456789"
         type:
           description: The type of the user. You need to have the right to update this field.
           type: string

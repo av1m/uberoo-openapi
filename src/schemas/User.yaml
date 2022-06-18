@@ -24,7 +24,7 @@ properties:
     description: The phone of the user
     type: string
     nullable: false
-    example: "0123456789"
+    example: "+33123456789"
   createdAt:
     description: The date of creation of the user
     type: string
