@@ -1,8 +1,7 @@
 # Uberoo OpenAPI
 
 [![Deploy UberooAPI to GitHub Pages](https://github.com/av1m/uberoo-openapi/actions/workflows/gh-pages.yaml/badge.svg)](https://github.com/av1m/uberoo-openapi/actions/workflows/gh-pages.yaml)
-
-![https://av1m.github.io/uberoo-openapi/](https://img.shields.io/static/v1?label=docs&message=Redocly&color=green)
+[![Link of docs](https://img.shields.io/static/v1?label=docs&message=Redocly&color=green)](https://av1m.github.io/uberoo-openapi/)
 
 Table of Contents:  
 
