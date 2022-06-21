@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "This repository contains OpenAPI specifications for the Uberoo API",
   "config": {
-    "extension": "yaml"
+    "extension": "json"
   },
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "swagger-python": "connexion run .build/openapi.$npm_package_config_extension --stub --debug --verbose --mock all --port 5000",
     "redoc-preview": "npm run build && redoc-cli serve .build/openapi.$npm_package_config_extension --options.onlyRequiredInSamples --port 5000",
     "redoc-html": "npm run build && redoc-cli bundle .build/openapi.$npm_package_config_extension --output .build/index.html --options.onlyRequiredInSamples",
-    "use-yaml": "sed -i -e 's/\"json\"/\"yaml\"/g' package.json",
-    "use-json": "sed -i -e 's/\"yaml\"/\"json\"/g' package.json"
+    "use-yaml": "sed -e 's/\"json\"/\"yaml\"/g' package.json",
+    "use-json": "sed -e 's/\"yaml\"/\"json\"/g' package.json"
   },
   "dependencies": {
     "@apidevtools/swagger-cli": "^4.0.4",
