@@ -1,0 +1,2884 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Uberoo API",
+    "description": "To manage restaurants, menus, delivery people and orders with the Uberoo REST API.  \nYou can find out more about Uberoo at [uberoo.eat](https://uberoo.eat) and developer documentation at [developers.uberoo.eat](https://developers.uberoo.eat).\n\n# Authentication\n## Bearer\nTo authenticate you need to send a `Bearer <JWT>` token in the `Authorization` header.  \nTo find more information about JWT, you can find out more at [https://jwt.io](https://jwt.io).  \nYou can generate a JWT token using the `/account/login` endpoint.\n",
+    "version": "1.0.0",
+    "termsOfService": "http://api.uberoo.eat/terms/",
+    "contact": {
+      "name": "Uberoo API Team",
+      "email": "apiteam@uberoo.eat",
+      "url": "https://api.uberoo.eat/contact/"
+    }
+  },
+  "externalDocs": {
+    "description": "Github repository",
+    "url": "https://github.com/av1m/uberoo-api"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Local server"
+    },
+    {
+      "url": "http://api-sandbox.uberoo.eat",
+      "description": "Sandbox server"
+    },
+    {
+      "url": "http://api-staging.uberoo.eat",
+      "description": "Staging server"
+    },
+    {
+      "url": "https://api.uberoo.eat",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "restaurants",
+      "description": "Manage restaurants"
+    },
+    {
+      "name": "foods",
+      "description": "Manage foods and menus of restaurants"
+    },
+    {
+      "name": "carts",
+      "description": "Manage carts / baskets of customers"
+    },
+    {
+      "name": "orders",
+      "description": "Manage orders of customers"
+    },
+    {
+      "name": "accounts",
+      "description": "Manage accounts : authentication, registration, reset password"
+    },
+    {
+      "name": "users",
+      "description": "Manage users of Uberoo. Theses endpoints are for all users. Check specific type user for more information"
+    },
+    {
+      "name": "payments",
+      "description": "Manage payments of orders"
+    },
+    {
+      "name": "notifications",
+      "description": "Manage all notifications, including push notifications, email, SMS and Webhook"
+    },
+    {
+      "name": "issues",
+      "description": "Manage issues and feedback"
+    }
+  ],
+  "paths": {
+    "/restaurants/v1": {
+      "get": {
+        "summary": "List all restaurants",
+        "operationId": "getRestaurants",
+        "description": "Retrieve all the information about all the restaurants",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "name": "is_open",
+            "in": "query",
+            "description": "Filter restaurants by their open status (based on the current time)",
+            "required": true,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "$ref": "#/paths/~1users~1v1/get/parameters/1"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of restaurants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Restaurant"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no restaurants were found"
+          },
+          "205": {
+            "description": "Partial list of restaurants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Restaurant"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": "YXJyYXljb25uZWN0aW9uOjE="
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new restaurant",
+        "operationId": "createRestaurant",
+        "description": "Create a new restaurant. The restaurant will be returned in the response",
+        "tags": [
+          "restaurants"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Restaurant object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "McDonald's"
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "5 rue Charlot, 75003 Paris"
+                  },
+                  "tag": {
+                    "description": "A list of tag of the restaurant",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "fast-food",
+                      "american"
+                    ]
+                  },
+                  "openingHours": {
+                    "description": "The opening hours of the restaurant",
+                    "type": "array",
+                    "items": {
+                      "description": "Format day:hour with 0 for monday and 0,23 for hours",
+                      "type": "string"
+                    },
+                    "minItems": 0,
+                    "maxItems": 168,
+                    "example": [
+                      "0:20",
+                      "0:21",
+                      "0:22",
+                      "0:23"
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "address",
+                  "tag",
+                  "openingHours"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Restaurant was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/v1/{restaurantId}": {
+      "get": {
+        "summary": "Get a restaurant",
+        "operationId": "getRestaurant",
+        "description": "Retrieve all the information about a given restaurant by its id",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected respaonse to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a restaurant",
+        "operationId": "deleteRestaurant",
+        "description": "Deletes the restaurant with the specified ID",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Restaurant was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a restaurant",
+        "operationId": "updateRestaurant",
+        "description": "Update the restaurant with the specified ID",
+        "tags": [
+          "restaurants"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/paths/~1restaurants~1v1/post/requestBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Restaurant was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Restaurant"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/users/v1/{userId}/carts": {
+      "get": {
+        "summary": "Get the cart of the user passed in the path",
+        "operationId": "getUserCart",
+        "description": "Retrieve all the information about a given user's cart",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected response to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a item to the cart",
+        "operationId": "addFoodToCart",
+        "description": "Add a food item to the cart of the user passed in the path",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Cart item object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foodId": {
+                    "description": "The id of the food to add. Check Food schema for more information.",
+                    "type": "string",
+                    "example": "60f1l27bcf126cd799439011"
+                  }
+                },
+                "required": [
+                  "foodId"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The food item has been added to the cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update or create the cart of the user passed in the path",
+        "operationId": "updateUserCart",
+        "description": "Update or create the cart of the user passed in the path and return the updated cart.\nIf an item does not exist, it will be created.\nIf an item exists, it will be updated.\nIf an item is not present (anymore) in the list, it will be deleted.\n",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Update Cart object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "description": "Cart item object",
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 0,
+                    "maxItems": 10,
+                    "example": [
+                      "60f1l27bcf126cd799439011"
+                    ]
+                  }
+                },
+                "required": [
+                  "items"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The cart was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Empty the cart of a user",
+        "operationId": "emptyUserCart",
+        "description": "Delete the cart of the user with the specified ID",
+        "tags": [
+          "carts"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cart was emptied"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/v1/{restaurantId}/foods": {
+      "get": {
+        "summary": "Get all foods in a restaurant",
+        "operationId": "getRestaurantFoods",
+        "description": "Recovers the list of all foods and menu associated with a specific restaurant",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "name": "is_gluten_free",
+            "in": "query",
+            "description": "Filter foods by their gluten-free status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_vegetarian",
+            "in": "query",
+            "description": "Filter foods by their vegetarian status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_vegan",
+            "in": "query",
+            "description": "Filter foods by their vegan status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "is_lactose_free",
+            "in": "query",
+            "description": "Filter foods by their lactose-free status",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of foods associated with the restaurant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Food"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no foods were found"
+          },
+          "205": {
+            "description": "A partial list of foods associated with the restaurant",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Food"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new food",
+        "operationId": "createFood",
+        "description": "Creates a new food associated with a restaurant",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Food object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "The name of the food, can be a menu",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "Pizza Margherita"
+                  },
+                  "price": {
+                    "description": "The price of the food",
+                    "type": "number",
+                    "format": "float",
+                    "nullable": false,
+                    "example": 10.5
+                  },
+                  "isGlutenFree": {
+                    "description": "Indicates if the food is gluten free",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "isVegetarian": {
+                    "description": "Indicates if the food is vegetarian",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "isVegan": {
+                    "description": "Indicates if the food is vegan",
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "restaurant": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "description": "The id of the restaurant",
+                        "example": "93321f77bcf86cd799439055"
+                      },
+                      {
+                        "$ref": "#/components/schemas/Restaurant"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "price",
+                  "restaurant"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The food was successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update many foods",
+        "operationId": "updateRestaurantFoods",
+        "description": "Updates the list of foods associated with a restaurant.\nIf a food is not present in the list, it will be deleted.\n",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "List of foods objects",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The foods were successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Food"
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/restaurants/v1/{restaurantId}/foods/{foodId}": {
+      "get": {
+        "summary": "Get a food item",
+        "operationId": "getFood",
+        "description": "Retrieve all the information about a given food",
+        "tags": [
+          "foods"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All information about the food",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a food item",
+        "operationId": "deleteFood",
+        "description": "Delete a food item with the specified ID from the restaurant",
+        "tags": [
+          "foods"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Food item was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a food item",
+        "operationId": "updateFood",
+        "description": "Update a food item for the restaurant",
+        "tags": [
+          "foods"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/restaurantId"
+          },
+          {
+            "$ref": "#/components/parameters/foodId"
+          }
+        ],
+        "requestBody": {
+          "description": "Information about the food item",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Food"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Food item was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Food"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/orders/v1": {
+      "get": {
+        "summary": "List orders",
+        "operationId": "getOrders",
+        "description": "Retrieve all the information about orders according to the query parameters. You can use the 'filter' parameter to filter the results.",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "name": "restaurantId",
+            "in": "query",
+            "description": "Filter orders by their restaurant id",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "example": [
+                "507f1f77bcf86cd799439011",
+                "507f191e810c19729de860ea"
+              ]
+            }
+          },
+          {
+            "name": "personId",
+            "in": "query",
+            "description": "Filter orders by their customer id",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "example": [
+                "507f1f77bcf86cd799439011",
+                "507f191e810c19729de860ea"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no orders were found"
+          },
+          "205": {
+            "description": "Partial list of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": "KJVkKJxvn25gLIZ0mI9gAvQ="
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new order",
+        "operationId": "createOrder",
+        "description": "Create a new order. The order will be returned in the response",
+        "tags": [
+          "orders"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Order object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "description": "The id of the customer who made the order.",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "70a286b5f7efe2aca2f828a1"
+                  },
+                  "restaurantId": {
+                    "description": "The id of the restaurant that serves the food",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "93321f77bcf86cd799439055"
+                  },
+                  "foods": {
+                    "description": "The list of foods id in the order",
+                    "nullable": false,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "62a286acf7efe2aca2f8289e"
+                    }
+                  },
+                  "deliveryAddress": {
+                    "type": "string",
+                    "description": "The address of the delivery",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  }
+                },
+                "required": [
+                  "customerId",
+                  "restaurantId",
+                  "foods",
+                  "deliveryAddress"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order was created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The resource you want to update is in conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Conflict",
+                  "code": 409,
+                  "details": "There is a request conflicts with the current state of the server"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/orders/v1/{orderId}": {
+      "get": {
+        "summary": "Get an order",
+        "operationId": "getOrder",
+        "description": "Retrieve all the information about a given order by its id",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "example": "62a286acf7efe2aca2f8289e",
+            "description": "The id of the order to retrieve. Check Order schema for more information.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected respaonse to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an order",
+        "operationId": "deleteOrder",
+        "description": "Deletes the order with the specified ID. You must have the permission to delete the order",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1orders~1v1~1%7BorderId%7D/get/parameters/0"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Order was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an order",
+        "operationId": "updateOrder",
+        "description": "Update the order with the specified ID",
+        "tags": [
+          "orders"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/paths/~1orders~1v1~1%7BorderId%7D/get/parameters/0"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "Order update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foods": {
+                    "description": "The list of foods id in the order",
+                    "nullable": false,
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "62a286acf7efe2aca2f8289e"
+                    }
+                  },
+                  "deliveryAddress": {
+                    "type": "string",
+                    "description": "The address of the delivery",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  },
+                  "courierId": {
+                    "description": "The id of the courier who is handling the order. By default, the order is not handled.",
+                    "type": "string",
+                    "nullable": true,
+                    "example": "87b8f7efe2aca2f828a262a2"
+                  },
+                  "status": {
+                    "description": "The status of the order",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "pending",
+                    "enum": [
+                      "pending",
+                      "validated",
+                      "canceled"
+                    ]
+                  },
+                  "acceptedAt": {
+                    "description": "The date of the creation of the order",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": false,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "preparingTime": {
+                    "description": "The time it takes to prepare the order (in minutes)",
+                    "type": "number",
+                    "nullable": true,
+                    "example": 10
+                  },
+                  "deliveryTime": {
+                    "description": "The time it takes to deliver the order to the customer (in minutes)",
+                    "type": "number",
+                    "nullable": true,
+                    "example": 15
+                  },
+                  "deliveredAt": {
+                    "description": "The date of the delivery of the order",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "canceledAt": {
+                    "description": "The date of the cancellation of the order. By default, the order is not canceled.",
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "example": "2020-01-01T00:00:00.000Z"
+                  },
+                  "paymentId": {
+                    "description": "The payment of the order (by default, the order is not paid)",
+                    "type": "string",
+                    "nullable": true,
+                    "example": "62a286acf7efe2aca2f8289e"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/v1/register": {
+      "post": {
+        "summary": "Register",
+        "description": "Register a new user to Uberoo",
+        "operationId": "register",
+        "tags": [
+          "accounts"
+        ],
+        "security": [
+          {},
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User object needed to register",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@doe.fr"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Azerty123"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "Valid values are User's type. Depending on the type of account to be created, the user must have certain rights.For example, a customer account cannot create an admin account."
+                  },
+                  "address": {
+                    "type": "string",
+                    "example": "5 Rue Charlot, 75003 Paris France"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration successful, return a User object with a JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "$ref": "#/paths/~1orders~1v1/post/responses/409"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/v1/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Login with email and password to get a JWT token",
+        "operationId": "login",
+        "tags": [
+          "accounts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@doe.fr"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "Azerty123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/accounts/v1/password": {
+      "patch": {
+        "summary": "Change password",
+        "description": "Change password",
+        "operationId": "changePassword",
+        "tags": [
+          "accounts"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "password": "Azerty123@"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The password has been changed"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/users/v1": {
+      "get": {
+        "summary": "List users",
+        "operationId": "getUsers",
+        "description": "Retrieve all the information about users according to the query parameters. You can use the 'filter' parameter to filter the results.",
+        "tags": [
+          "users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "name": "nearest",
+            "in": "query",
+            "description": "Filter the resource by their distance from a specified location. The specified location is specified by longitude and latitude. The distance is specified in meters.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The longitude and latitude of the location to use as the center of the search. The longitude is in the range [-180,180] and the latitude is in the range [-90,90]. The default is the current location of the client.",
+              "default": "48.8701419,2.271431"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The query was successful but no users were found"
+          },
+          "205": {
+            "description": "Partial list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "endCursor": {
+                          "type": "string",
+                          "example": "ONZoONbzr25kPMD0qM9kEzU="
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    },
+    "/users/v1/{userId}": {
+      "get": {
+        "summary": "Get an user",
+        "operationId": "getUser",
+        "description": "Retrieve all the information about a given user by its id",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          },
+          {
+            "$ref": "#/components/parameters/field"
+          },
+          {
+            "$ref": "#/components/parameters/order"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expected respaonse to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an user",
+        "operationId": "deleteUser",
+        "description": "Deletes the user with the specified ID. You must have the permission to delete the user",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User was deleted"
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update an user",
+        "operationId": "updateUser",
+        "description": "Update the user with the specified ID",
+        "tags": [
+          "users"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/userId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "description": "User update object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "description": "The first name of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "John"
+                  },
+                  "lastName": {
+                    "description": "The last name of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "Doe"
+                  },
+                  "email": {
+                    "description": "The email of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "john@doe.com"
+                  },
+                  "phone": {
+                    "description": "The phone of the user",
+                    "type": "string",
+                    "nullable": false,
+                    "example": "+33123456789"
+                  },
+                  "type": {
+                    "description": "The type of the user. You need to have the right to update this field.",
+                    "type": "string",
+                    "nullable": false,
+                    "default": "consumer",
+                    "example": "consumer",
+                    "enum": [
+                      "courier",
+                      "merchant",
+                      "consumer",
+                      "support",
+                      "admin"
+                    ]
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "The address of the user",
+                    "example": "Pl. du Maréchal de Lattre de Tassigny, 75016 Paris"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User was updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "304": {
+            "$ref": "#/components/responses/NotModified"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/NotAuthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationFailed"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequest"
+          },
+          "default": {
+            "$ref": "#/components/responses/UnexpectedError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "restaurantId": {
+        "name": "restaurantId",
+        "in": "path",
+        "required": true,
+        "example": "62f1l77bcf86cd799439011",
+        "description": "The id of the restaurant to retrieve. Check Restaurant schema for more information.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "userId": {
+        "name": "userId",
+        "in": "path",
+        "required": true,
+        "example": "68f1l77bcf86cd799439011",
+        "description": "The id of the user to retrieve.\nIt exist a special value \"me\" that can be used to retrieve the current user.\nCheck User schema for more information.\n",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "foodId": {
+        "name": "foodId",
+        "in": "path",
+        "required": true,
+        "example": "60f1l27bcf126cd799439011",
+        "description": "The id of the food to retrieve. Check Food schema for more information.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "offset": {
+        "name": "offset",
+        "in": "query",
+        "description": "The offset of returned data",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "YXJyYXljb25uZWN0aW9uOjE"
+        }
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "The numbers of items to return",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "order": {
+        "name": "order",
+        "in": "query",
+        "description": "The order of returned data (asc or desc)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      },
+      "field": {
+        "name": "fields",
+        "in": "query",
+        "description": "The fields to return",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "example": [
+            "id"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "filter": {
+        "name": "filter",
+        "in": "query",
+        "required": false,
+        "description": "The (advanced) filter to apply to the data (e.g. 'name:John'). We can use :\n- `or` operator to combine filters (e.g. 'name:John or name:Doe').\n- `and` operator to combine filters (e.g. 'name:Doe and firstname:John').\n- `*` wildcard operator to match any string (e.g. 'name:John\\*' will match 'John' and 'John Doe')\n- `!` operator to negate a filter (e.g. '!name:John' will match all records except 'John')\n- `>` operator to get records with a value greater than a given value (e.g. 'name:John>10' will match records with a name greater than 'John' and 'John Doe')\n- `<` operator to get records with a value less than a given value (e.g. 'name:John<10' will match records with a name less than 'John' and 'John Doe')\n- `>=` operator to get records with a value greater than or equal to a given value (e.g. 'name:John>=10' will match records with a name greater than or equal to 'John' and 'John Doe')\n- `<=` operator to get records with a value less than or equal to a given value (e.g. 'name:John<=10' will match records with a name less than or equal to 'John' and 'John Doe')\n",
+        "schema": {
+          "type": "string",
+          "example": "(firstname:John or firstname:Kevin) and age:>18 and name:Du*t",
+          "minLength": 3,
+          "maxLength": 255
+        }
+      }
+    },
+    "schemas": {
+      "Restaurant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the restaurant",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799919011"
+          },
+          "name": {
+            "description": "The name of the restaurant",
+            "type": "string",
+            "nullable": false,
+            "example": "Le Cinq"
+          },
+          "tag": {
+            "description": "A list of tag of the restaurant",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "gastronomy",
+              "french"
+            ]
+          },
+          "openingHours": {
+            "description": "The opening hours of the restaurant",
+            "type": "array",
+            "items": {
+              "description": "Format day:hour with 0 for monday and 0,23 for hours",
+              "type": "string"
+            },
+            "minItems": 0,
+            "maxItems": 168,
+            "example": [
+              "1:11",
+              "1:12",
+              "1:13",
+              "1:14"
+            ]
+          },
+          "address": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The id of the address",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "openingHours",
+          "address"
+        ]
+      },
+      "Cart": {
+        "type": "object",
+        "description": "The cart of the user who can be only a 'consumer'",
+        "properties": {
+          "user": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "The id of the user",
+                "example": "507f1f77bcf86cd799439011"
+              },
+              {
+                "$ref": "#/components/schemas/User"
+              }
+            ]
+          },
+          "items": {
+            "description": "The list of items to order",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Food"
+                },
+                {
+                  "type": "string",
+                  "description": "The id of the food",
+                  "example": "321f1f77bcf86cd79943991"
+                }
+              ]
+            },
+            "minItems": 0,
+            "maxItems": 10
+          },
+          "total": {
+            "description": "The total price of the basket",
+            "type": "number",
+            "format": "float",
+            "example": 10.5
+          },
+          "createdAt": {
+            "description": "The date of creation of the basket",
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "description": "The date of update of the basket",
+            "type": "string",
+            "format": "date-time",
+            "example": "2020-01-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "user",
+          "items",
+          "total",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "Food": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The id of the food",
+                "type": "string",
+                "nullable": false,
+                "example": "507f1f77bcf86cd799439011"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          {
+            "$ref": "#/paths/~1restaurants~1v1~1%7BrestaurantId%7D~1foods/post/requestBody/content/application~1json/schema"
+          }
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the user",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "firstName": {
+            "description": "The first name of the user",
+            "type": "string",
+            "nullable": false,
+            "example": "John"
+          },
+          "lastName": {
+            "description": "The last name of the user",
+            "type": "string",
+            "nullable": false,
+            "example": "Doe"
+          },
+          "email": {
+            "description": "The email of the user",
+            "type": "string",
+            "nullable": false,
+            "example": "john@doe.com"
+          },
+          "phone": {
+            "description": "The phone of the user",
+            "type": "string",
+            "nullable": false,
+            "example": "+33123456789"
+          },
+          "createdAt": {
+            "description": "The date of creation of the user",
+            "type": "string",
+            "format": "date-time",
+            "nullable": false,
+            "example": "2019-01-01T00:00:00.000Z"
+          },
+          "password": {
+            "description": "The password of the user (hashed)",
+            "type": "string",
+            "nullable": false,
+            "example": "$2y$10$xO1hfZoxXHYKVv0yGwSDD.8Qfxa.hmSvhbvvKdtEmxIyRfSUBiQIC"
+          },
+          "type": {
+            "description": "The type of the user",
+            "type": "string",
+            "nullable": false,
+            "default": "consumer",
+            "example": "consumer",
+            "enum": [
+              "courier",
+              "merchant",
+              "consumer",
+              "support",
+              "admin"
+            ]
+          },
+          "isAvailable": {
+            "description": "The availability of the user, can be true only if the user is a courier",
+            "type": "boolean",
+            "nullable": true,
+            "default": false,
+            "example": false
+          },
+          "orders": {
+            "description": "The list of orders of the user, can be filled only if the user is a consumer/merchant/courier",
+            "nullable": true,
+            "example": [
+              "507f1f77bcf86cd799439011",
+              "507f1f77bcf86cd799439012"
+            ],
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Order"
+                },
+                {
+                  "type": "string",
+                  "description": "The id of the order"
+                }
+              ]
+            }
+          },
+          "address": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The id of the address",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "createdAt",
+          "password",
+          "type"
+        ]
+      },
+      "Order": {
+        "type": "object",
+        "description": "Represents a food.  \nWhen a food is added to the cart, and the customer validate the order, a new order is create.\n",
+        "properties": {
+          "id": {
+            "description": "The id of the order.",
+            "type": "string",
+            "nullable": false,
+            "example": "62a286acf7efe2aca2f8289e"
+          },
+          "customerId": {
+            "description": "The id of the customer who made the order.",
+            "type": "string",
+            "nullable": false,
+            "example": "70a286b5f7efe2aca2f828a1"
+          },
+          "courierId": {
+            "description": "The id of the courier who is handling the order. By default, the order is not handled.",
+            "type": "string",
+            "nullable": true,
+            "example": "87b8f7efe2aca2f828a262a2"
+          },
+          "restaurantId": {
+            "description": "The id of the restaurant that serves the food",
+            "type": "string",
+            "nullable": false,
+            "example": "93321f77bcf86cd799439055"
+          },
+          "foods": {
+            "description": "The list of foods in the order",
+            "nullable": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Food"
+            }
+          },
+          "total": {
+            "description": "The total price of the order",
+            "type": "number",
+            "nullable": false,
+            "example": 12.5
+          },
+          "status": {
+            "description": "The status of the order",
+            "type": "string",
+            "nullable": false,
+            "example": "pending",
+            "enum": [
+              "pending",
+              "validated",
+              "canceled"
+            ]
+          },
+          "acceptedAt": {
+            "description": "The date of the creation of the order",
+            "type": "string",
+            "format": "date-time",
+            "nullable": false,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "preparingTime": {
+            "description": "The time it takes to prepare the order (in minutes)",
+            "type": "number",
+            "nullable": true,
+            "example": 10
+          },
+          "deliveryTime": {
+            "description": "The time it takes to deliver the order to the customer (in minutes)",
+            "type": "number",
+            "nullable": true,
+            "example": 15
+          },
+          "deliveredAt": {
+            "description": "The date of the delivery of the order",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "canceledAt": {
+            "description": "The date of the cancellation of the order. By default, the order is not canceled.",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "example": "2020-01-01T00:00:00.000Z"
+          },
+          "paymentId": {
+            "description": "The payment of the order (by default, the order is not paid)",
+            "type": "string",
+            "nullable": true,
+            "example": "62a286acf7efe2aca2f8289e"
+          },
+          "deliveryAddress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Address"
+              },
+              {
+                "type": "string",
+                "description": "The address of the delivery",
+                "example": "5421f77bcf86cd799439099"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "customerId",
+          "restaurantId",
+          "foods",
+          "total",
+          "status",
+          "acceptedAt",
+          "deliveryAddress"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "The id of the address",
+            "type": "string",
+            "nullable": false,
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "number": {
+            "description": "The address number",
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "example": 5
+          },
+          "street": {
+            "description": "The address street",
+            "type": "string",
+            "nullable": false,
+            "example": "Rue Charlot"
+          },
+          "city": {
+            "description": "The address city",
+            "type": "string",
+            "nullable": false,
+            "example": "Paris"
+          },
+          "postalCode": {
+            "description": "The address postal code",
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 75003
+          },
+          "state": {
+            "description": "The address state",
+            "type": "string",
+            "nullable": true,
+            "example": "Île-de-France"
+          },
+          "country": {
+            "description": "The address country",
+            "type": "string",
+            "nullable": false,
+            "example": "France"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "street",
+          "city",
+          "postalCode",
+          "country"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": false,
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "nullable": false,
+            "example": "Internal Server Error"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true,
+            "example": "Something went wrong, please try again later"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Bad Request",
+              "code": 400,
+              "details": "The request was malformed, please check the request body reference and example. The request body should be a valid JSON"
+            }
+          }
+        }
+      },
+      "NotAuthorized": {
+        "description": "Requires authentication",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Authentication required",
+              "code": 401,
+              "details": "You must be authenticated to access this resource"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Forbidden",
+              "code": 403,
+              "details": "You are not allowed to access this resource, please contact the administrator."
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Ressource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Ressource not found",
+              "code": 404,
+              "details": "The ressource you are looking for could not be found"
+            }
+          }
+        }
+      },
+      "NotModified": {
+        "description": "Not modified",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Not Modified",
+              "code": 304,
+              "details": "The requested resource has not been modified since the last request and we use the cached version of the resource"
+            }
+          }
+        }
+      },
+      "TooManyRequest": {
+        "description": "Too many requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Too Many Requests",
+              "code": 429,
+              "details": "You have made too many requests to the server. Please try again later"
+            }
+          }
+        }
+      },
+      "ValidationFailed": {
+        "description": "Validation failed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Validation failed",
+              "code": 422,
+              "details": "The request was successfully constituted but could not be processed due to semantic errors.\nIf you try to add an address, the address may not be valid.\n"
+            }
+          }
+        }
+      },
+      "UnexpectedError": {
+        "description": "Unexpected error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "message": "Internal Server Error",
+              "code": 500,
+              "details": "Something went wrong, please try again later"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
