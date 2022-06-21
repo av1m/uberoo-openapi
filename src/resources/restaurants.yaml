@@ -41,7 +41,7 @@ get:
                     example: false
     "204":
       description: "The query was successful but no restaurants were found"
-    "205":
+    "206":
       description: "Partial list of restaurants"
       content:
         application/json:

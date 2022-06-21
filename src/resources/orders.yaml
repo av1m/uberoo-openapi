@@ -47,7 +47,7 @@ get:
                     example: false
     "204":
       description: "The query was successful but no orders were found"
-    "205":
+    "206":
       description: "Partial list of orders"
       content:
         application/json:

@@ -36,7 +36,7 @@ get:
                     example: false
     "204":
       description: "The query was successful but no users were found"
-    "205":
+    "206":
       description: "Partial list of users"
       content:
         application/json:
