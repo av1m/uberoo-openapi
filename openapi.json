@@ -145,7 +145,7 @@
           "204": {
             "description": "The query was successful but no restaurants were found"
           },
-          "205": {
+          "206": {
             "description": "Partial list of restaurants",
             "content": {
               "application/json": {
@@ -259,10 +259,12 @@
         "responses": {
           "201": {
             "description": "Restaurant was created",
-            "content": {
-              "application/json": {
+            "headers": {
+              "Location": {
+                "description": "The Location of the created restaurant",
                 "schema": {
-                  "$ref": "#/components/schemas/Restaurant"
+                  "type": "string",
+                  "format": "uri"
                 }
               }
             }
@@ -533,10 +535,12 @@
         "responses": {
           "201": {
             "description": "The food item has been added to the cart",
-            "content": {
-              "application/json": {
+            "headers": {
+              "Location": {
+                "description": "The location of the new cart item",
                 "schema": {
-                  "$ref": "#/components/schemas/Cart"
+                  "type": "string",
+                  "format": "uri"
                 }
               }
             }
@@ -782,7 +786,7 @@
           "204": {
             "description": "The query was successful but no foods were found"
           },
-          "205": {
+          "206": {
             "description": "A partial list of foods associated with the restaurant",
             "content": {
               "application/json": {
@@ -908,10 +912,12 @@
         "responses": {
           "201": {
             "description": "The food was successfully created",
-            "content": {
-              "application/json": {
+            "headers": {
+              "Location": {
+                "description": "The location of the new food",
                 "schema": {
-                  "$ref": "#/components/schemas/Food"
+                  "type": "string",
+                  "format": "uri"
                 }
               }
             }
@@ -1263,7 +1269,7 @@
           "204": {
             "description": "The query was successful but no orders were found"
           },
-          "205": {
+          "206": {
             "description": "Partial list of orders",
             "content": {
               "application/json": {
@@ -1368,10 +1374,12 @@
         "responses": {
           "201": {
             "description": "Order was created",
-            "content": {
-              "application/json": {
+            "headers": {
+              "Location": {
+                "description": "The URL of the created order",
                 "schema": {
-                  "$ref": "#/components/schemas/Order"
+                  "type": "string",
+                  "format": "uri"
                 }
               }
             }
@@ -1710,20 +1718,13 @@
         },
         "responses": {
           "201": {
-            "description": "Registration successful, return a User object with a JWT token",
-            "content": {
-              "application/json": {
+            "description": "Registration successful",
+            "headers": {
+              "Location": {
+                "description": "The Location of the created user",
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "user": {
-                      "$ref": "#/components/schemas/User"
-                    },
-                    "token": {
-                      "type": "string",
-                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-                    }
-                  }
+                  "type": "string",
+                  "format": "uri"
                 }
               }
             }
@@ -1932,7 +1933,7 @@
           "204": {
             "description": "The query was successful but no users were found"
           },
-          "205": {
+          "206": {
             "description": "Partial list of users",
             "content": {
               "application/json": {
