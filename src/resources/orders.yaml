@@ -88,10 +88,12 @@ post:
   responses:
     "201":
       description: "Order was created"
-      content:
-        application/json:
+      headers:
+        Location:
+          description: "The URL of the created order"
           schema:
-            $ref: "../schemas/Order.yaml"
+            type: string
+            format: uri
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":

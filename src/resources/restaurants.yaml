@@ -82,10 +82,12 @@ post:
   responses:
     "201":
       description: "Restaurant was created"
-      content:
-        application/json:
+      headers:
+        Location:
+          description: "The Location of the created restaurant"
           schema:
-            $ref: "../schemas/Restaurant.yaml"
+            type: string
+            format: uri
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":

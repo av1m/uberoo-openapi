@@ -44,10 +44,12 @@ post:
   responses:
     "201":
       description: "The food item has been added to the cart"
-      content:
-        application/json:
+      headers:
+        Location:
+          description: "The location of the new cart item"
           schema:
-            $ref: "../schemas/Cart.yaml"
+            type: string
+            format: uri
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":

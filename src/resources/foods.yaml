@@ -111,10 +111,12 @@ post:
   responses:
     "201":
       description: "The food was successfully created"
-      content:
-        application/json:
+      headers:
+        Location:
+          description: "The location of the new food"
           schema:
-            $ref: "../schemas/Food.yaml"
+            type: string
+            format: uri
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":

@@ -36,17 +36,13 @@ post:
               example: "5 Rue Charlot, 75003 Paris France"
   responses:
     "201":
-      description: "Registration successful, return a User object with a JWT token"
-      content:
-        application/json:
+      description: "Registration successful"
+      headers:
+        Location:
+          description: "The Location of the created user"
           schema:
-            type: object
-            properties:
-              user:
-                $ref: "../schemas/User.yaml"
-              token:
-                type: string
-                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            type: string
+            format: uri
     "400":
       $ref: "../responses/BadRequest.yaml"
     "401":
