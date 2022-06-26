@@ -441,7 +441,7 @@
     },
     "/users/v1/{userId}/carts": {
       "get": {
-        "summary": "Get the cart of the user passed in the path",
+        "summary": "Get the cart of the user",
         "operationId": "getUserCart",
         "description": "Retrieve all the information about a given user's cart",
         "tags": [
@@ -566,7 +566,7 @@
         }
       },
       "put": {
-        "summary": "Update or create the cart of the user passed in the path",
+        "summary": "Update or create the cart of the user",
         "operationId": "updateUserCart",
         "description": "Update or create the cart of the user passed in the path and return the updated cart.\nIf an item does not exist, it will be created.\nIf an item exists, it will be updated.\nIf an item is not present (anymore) in the list, it will be deleted.\n",
         "tags": [
