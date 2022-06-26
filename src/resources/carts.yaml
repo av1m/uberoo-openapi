@@ -1,5 +1,5 @@
 get:
-  summary: "Get the cart of the user passed in the path"
+  summary: "Get the cart of the user"
   operationId: getUserCart
   description: "Retrieve all the information about a given user's cart"
   tags:
@@ -63,7 +63,7 @@ post:
     default:
       $ref: "../responses/UnexpectedError.yaml"
 put:
-  summary: "Update or create the cart of the user passed in the path"
+  summary: "Update or create the cart of the user"
   operationId: updateUserCart
   description: |
     Update or create the cart of the user passed in the path and return the updated cart.
